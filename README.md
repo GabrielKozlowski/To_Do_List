@@ -11,11 +11,12 @@ When the thing it's done we can move it to list of doned things or we can delete
 
 <h2><b>Technologies</b></h2>
 
-<li>
-Python 3.11
-Tkinter 8.6
+<ul>
+    <li>Python 3.11</li>
+    <li>Tkinter 8.6</li>
+    <li>Tkinter 8.6</li>
 
-</li>
+</ul>
 
 
 <h2><b>Status</b></h2>
