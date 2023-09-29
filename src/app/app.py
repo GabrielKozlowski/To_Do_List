@@ -26,6 +26,11 @@ class ToDoList():
         # Submit Button
         self.button = self.create_add_task_button()
 
+        # Lists buttons
+        self.tasks_to_do_list_button = self.create_button_for_list_of_tasks_to_do()
+        self.all_tasks_list_button = self.create_button_for_all_task_list()
+        self.completed_tasks_list_button = self.create_button_for_completed_tasks_list()
+
         # List for tasks
         self.tasks = self.get_all_tasks_from_db()
 
@@ -66,7 +71,7 @@ class ToDoList():
                        name VARCHAR(255) NOT NULL
                        )""")
         
-        cursor.execute("""CREATE TABLE IF NOT EXISTS comleted_tasks(
+        cursor.execute("""CREATE TABLE IF NOT EXISTS completed_tasks(
                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                        name VARCHAR(255) NOT NULL
                        )""")
@@ -82,28 +87,97 @@ class ToDoList():
 
     # Creates a frame for options buttons
     def create_options_frame(self):
-        frame = Frame(self.window, height=250, bg='red')
+        frame = Frame(self.window, height=80, bg='red')
         frame.pack(fill='both', expand=True)
         return frame
+
+    
+    # Create button to list of tasks to do 
+    def create_button_for_list_of_tasks_to_do(self):
+        button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Tasks to do", command=self.show_tasks_to_do_list)
+        # button.pack(padx=20)
+        button.grid(row=0, column=0, pady=20, sticky='')
+
+        return button
+
+
+    # Create button for all task to do list
+    def create_button_for_all_task_list(self):
+        button = Button(self.options_frame, width=15, bg='grey', fg='white', text="All Tasks", command=self.show_all_tasks_list)
+        # button.pack(padx=20)
+        button.grid(row=0, column=1, pady=20, sticky='')
+        return button
+    
+
+    # Create button for completed tasks list
+    def create_button_for_completed_tasks_list(self):
+        button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Completed Tasks", command=self.show_completed_tasks_list)
+        # button.pack(padx=20)
+        button.grid(row=0, column=2, pady=20, padx=10, sticky='', columnspan=2)
+        return button
+
+    
+    # Show list of tasks to do
+    def show_tasks_to_do_list(self):
+        # Connect to database
+        db_connector = sqlite3.connect('to_do_list.db')
+
+        # Create cursor
+        cursor = db_connector.cursor()
+
+        # Get tasks from all_tasts db
+        tasks = cursor.execute("""SELECT name FROM task_to_do""")
+        return tasks
+    
+
+    # Show list of tasks to do
+    def show_all_tasks_list(self):
+        # Connect to database
+        db_connector = sqlite3.connect('to_do_list.db')
+
+        # Create cursor
+        cursor = db_connector.cursor()
+
+        # Get tasks from all_tasts db
+        tasks = cursor.execute("""SELECT name FROM all_tasks""")
+        return tasks
+    
+
+    # Show list of tasks to do
+    def show_completed_tasks_list(self):
+        # Connect to database
+        db_connector = sqlite3.connect('to_do_list.db')
+
+        # Create cursor
+        cursor = db_connector.cursor()
+
+        # Get tasks from all_tasts db
+        tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+        return tasks
+    
+
+
 
 
     # Create input field
     def create_input_field(self):
-        field = Entry(self.options_frame, width=30, bg='gray', fg='black', font='Georgia 12')        
-        field.pack(side=LEFT, expand=True, pady=20)
+        field = Entry(self.options_frame, width=27, bg='gray', fg='white', font='Georgia 12')        
+        # field.pack(side=LEFT, expand=True, pady=20)
+        field.grid(row=1, column=0, columnspan=3, padx=30, pady=20)
         return field
 
     # Create add task button
 
     def create_add_task_button(self):
-        button = Button(self.options_frame, width=8, bg='green', text="Add Task", command=self.add_task_to_list)
-        button.pack(side=RIGHT, expand=True)
+        button = Button(self.options_frame, width=8, fg='white', bg='green', text="Add Task", command=self.add_task_to_list)
+        # button.pack(side=RIGHT, expand=True)
+        button.grid(row=1, column=3, sticky='', padx=10, pady=20)
         return button
 
 
     # Creates a frame for tasks list
     def create_tasks_frame(self):
-        frame = Frame(self.window, width=50, height=450, bg='yellow')
+        frame = Frame(self.window, width=50, height=620, bg='yellow')
         frame.pack(expand=True, fill="both")
         return frame
 
