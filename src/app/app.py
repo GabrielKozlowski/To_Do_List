@@ -1,4 +1,5 @@
 from tkinter import *
+from time import sleep
 import sqlite3
 
 LIGHT_ORANGE = "#ffa64d"
@@ -54,7 +55,8 @@ class ToDoList():
         self.add_to_completed_button = self.create_add_to_completed_button()
         self.delete_button = self.create_delete_button()
 
-        # self.aa = self.create_button()
+        # Email button
+        self.email_button = self.create_email_button()
 
 
 
@@ -87,11 +89,6 @@ class ToDoList():
 
 
 
-    def create_button(self):
-        a = Button(self.options_frame, width=20)
-        a.grid(row=1, column=0)
-        return a
-
 
 
 
@@ -103,12 +100,20 @@ class ToDoList():
         frame.pack(fill='both', expand=False)
         return frame
 
-    
+
+    # Create button for email
+    def create_email_button(self):
+        button = Button(self.options_frame, width=20, bg='grey', fg='white', text="Send task to email")
+        
+        button.grid(row=1, column=1)
+        button.bind("<Button>",  lambda e: self.email_window())
+        return button
+
+
     # Create button to list of tasks to do 
     def create_button_for_list_of_tasks_to_do(self):
         button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Tasks to do", command=self.show_tasks_to_do_list)
         button.grid(row=0, column=0, pady=20, sticky='')
-
         return button
 
 
@@ -171,6 +176,51 @@ class ToDoList():
         return tasks
     
 
+    # Open email window
+    def email_window(self):
+        master = Tk()
+        master.title("New Window")
+        master.geometry("500x500")
+
+        own_email_address_field = Label(master, text="Your email address:")
+        passwd_to_email_field = Label(master, text="Password for email:")
+        email_address_to_send_field = Label(master, text ="Recipient Address:")
+        message_to_send_field = Label(master, text ="Message:")
+
+        own_email_address_entry = Entry(master, width=40)
+        passwd_to_email_entry = Entry(master, width=40)
+        email_addres_to_send_entry = Entry(master, width=40)
+        message_to_send_entry = Entry(master, width=40)
+
+        send_email_buton = Button(master, width=20, text='Send Email')
+        
+        choosen_field = Label(master, text="Which List You Want Send ?")
+
+
+        choosen_list = IntVar()
+        Radiobutton(master, text="To Do", variable=choosen_list, value=1).grid(row=5, column=0)
+        Radiobutton(master, text="All Tasks", variable=choosen_list, value=2).grid(row=5, column=1)
+        Radiobutton(master, text="Completed", variable=choosen_list, value=3).grid(row=5, column=2)
+
+        own_email_address_field.grid(row=0, column=0)
+        own_email_address_entry.grid(row=0, column=1, columnspan=2)
+        passwd_to_email_field.grid(row=1, column=0)
+        passwd_to_email_entry.grid(row=1, column=1, columnspan=2)
+
+
+        email_address_to_send_field.grid(row=2, column=0)
+        email_addres_to_send_entry.grid(row=2, column=1, columnspan=2)
+
+        message_to_send_field.grid(row=3, column=0)
+        message_to_send_entry.grid(row=3, column=1, columnspan=2)
+
+        choosen_field.grid(row=4, column=1)
+
+        send_email_buton.grid(row=6, column=1)
+        
+
+        return master
+
 
 
 
@@ -222,12 +272,12 @@ class ToDoList():
         list_scrollbar.place(x=470, y=20, height=360)
         return list_scrollbar
     
+
     # Add scrollbar to list
     def add_scrollbar(self):
         self.list_of_tasks.config(yscrollcommand=self.list_scrollbar)
         self.list_scrollbar.config(command=self.list_of_tasks.yview)
         
-
 
     # Get tasks from list and return tasks in string
     def tasks_in_list(self):
