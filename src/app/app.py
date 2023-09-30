@@ -37,6 +37,8 @@ class ToDoList():
         # List of tasks
         self.list_of_tasks = self.create_list_of_tasks()
 
+        # Show list of tasks
+        self.show_list = self.show_list_of_task()
 
         # All task in list
         self.all_tasks = self.tasks_in_list()
@@ -52,6 +54,9 @@ class ToDoList():
         self.add_to_completed_button = self.create_add_to_completed_button()
         self.delete_button = self.create_delete_button()
 
+        # self.aa = self.create_button()
+
+
 
     def sqlite3_db(self):
         # Create or connect to database
@@ -63,17 +68,17 @@ class ToDoList():
         # Create tables
         cursor.execute("""CREATE TABLE IF NOT EXISTS all_tasks(
                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       name VARCHAR(255) NOT NULL
+                       name VARCHAR(255) UNIQUE NOT NULL
                        )""")
         
         cursor.execute("""CREATE TABLE IF NOT EXISTS task_to_do(
                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       name VARCHAR(255) NOT NULL
+                       name VARCHAR(255) UNIQUE NOT NULL
                        )""")
         
         cursor.execute("""CREATE TABLE IF NOT EXISTS completed_tasks(
                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                       name VARCHAR(255) NOT NULL
+                       name VARCHAR(255) UNIQUE NOT NULL
                        )""")
         
         # Commit changes in database
@@ -82,20 +87,26 @@ class ToDoList():
 
 
 
+    def create_button(self):
+        a = Button(self.options_frame, width=20)
+        a.grid(row=1, column=0)
+        return a
+
+
+
 
 
 
     # Creates a frame for options buttons
     def create_options_frame(self):
-        frame = Frame(self.window, height=80, bg='red')
-        frame.pack(fill='both', expand=True)
+        frame = Frame(self.window, height=150, bg='red')
+        frame.pack(fill='both', expand=False)
         return frame
 
     
     # Create button to list of tasks to do 
     def create_button_for_list_of_tasks_to_do(self):
         button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Tasks to do", command=self.show_tasks_to_do_list)
-        # button.pack(padx=20)
         button.grid(row=0, column=0, pady=20, sticky='')
 
         return button
@@ -104,7 +115,6 @@ class ToDoList():
     # Create button for all task to do list
     def create_button_for_all_task_list(self):
         button = Button(self.options_frame, width=15, bg='grey', fg='white', text="All Tasks", command=self.show_all_tasks_list)
-        # button.pack(padx=20)
         button.grid(row=0, column=1, pady=20, sticky='')
         return button
     
@@ -112,7 +122,6 @@ class ToDoList():
     # Create button for completed tasks list
     def create_button_for_completed_tasks_list(self):
         button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Completed Tasks", command=self.show_completed_tasks_list)
-        # button.pack(padx=20)
         button.grid(row=0, column=2, pady=20, padx=10, sticky='', columnspan=2)
         return button
 
@@ -127,6 +136,8 @@ class ToDoList():
 
         # Get tasks from all_tasts db
         tasks = cursor.execute("""SELECT name FROM task_to_do""")
+        self.tasks = tasks
+        self.show_list_of_task()
         return tasks
     
 
@@ -140,6 +151,8 @@ class ToDoList():
 
         # Get tasks from all_tasts db
         tasks = cursor.execute("""SELECT name FROM all_tasks""")
+        self.tasks = tasks
+        self.show_list_of_task()
         return tasks
     
 
@@ -153,6 +166,8 @@ class ToDoList():
 
         # Get tasks from all_tasts db
         tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+        self.tasks = tasks
+        self.show_list_of_task()
         return tasks
     
 
@@ -161,38 +176,44 @@ class ToDoList():
 
     # Create input field
     def create_input_field(self):
-        field = Entry(self.options_frame, width=27, bg='gray', fg='white', font='Georgia 12')        
-        # field.pack(side=LEFT, expand=True, pady=20)
-        field.grid(row=1, column=0, columnspan=3, padx=30, pady=20)
+        field = Entry(self.options_frame, width=27, bg='gray', fg='white', font='Georgia 12')
+        field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
         return field
 
     # Create add task button
 
     def create_add_task_button(self):
         button = Button(self.options_frame, width=8, fg='white', bg='green', text="Add Task", command=self.add_task_to_list)
-        # button.pack(side=RIGHT, expand=True)
-        button.grid(row=1, column=3, sticky='', padx=10, pady=20)
+        button.grid(row=2, column=3, sticky='', padx=10, pady=20)
         return button
 
 
     # Creates a frame for tasks list
     def create_tasks_frame(self):
-        frame = Frame(self.window, width=50, height=620, bg='yellow')
+        frame = Frame(self.window, width=50, height=550, bg='yellow')
         frame.pack(expand=True, fill="both")
         return frame
 
 
-    # Create frame for tasks list
+    # Create list of tasks
     def create_list_of_tasks(self):
-        tasks_list = Listbox(self.tasks_frame, fg="white", bg="grey", width=52, height=15, bd=0,highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
-        tasks_list.pack(pady=20, padx=30)
+        list_of_tasks = Listbox(self.tasks_frame, fg="white", bg="grey", width=52, height=15, bd=0,highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
+        list_of_tasks.pack(pady=20, padx=30)
 
-        # Change tasks to list and capitalize 
-        tasks = [task[0].capitalize() for task in list(self.tasks)]
+        return list_of_tasks
+
+
+    # Show list of task
+    def show_list_of_task(self):
+        # Get ListBox frame
+        list_of_tasks = self.list_of_tasks
+        list_of_tasks.delete(0, END)
+
+        tasks = [task[0].capitalize() for task in self.tasks]
         for task in tasks:
-            tasks_list.insert(END, task)
+            list_of_tasks.insert(END, task)
 
-        return tasks_list
+        return list_of_tasks
 
 
     # Create scrollbar
@@ -218,26 +239,39 @@ class ToDoList():
     def add_task_to_list(self):
         # Get task name from input
         new_task = self.input_field.get()
+        if new_task != '':
 
-        # Add task to list
-        self.list_of_tasks.insert(END, new_task.capitalize())
 
-        # Connect to database
-        db_connector = sqlite3.connect('to_do_list.db')
+            # Connect to database
+            db_connector = sqlite3.connect('to_do_list.db')
 
-        # Create cursor
-        cursor = db_connector.cursor()
+            # Create cursor
+            cursor = db_connector.cursor()
 
-        # Get tasks from all_tasts db
-        cursor.execute(f"""INSERT INTO all_tasks(id, name) VALUES(null, '{new_task.capitalize()}')""")
-        cursor.execute(f"""INSERT INTO task_to_do(id, name) VALUES(null, '{new_task.capitalize()}')""")
+            # Get all tasks name
+            tasks = cursor.execute("""SELECT name FROM all_tasks""")
+            # Convert to list
+            tasks_list = [task[0] for task in list(tasks)]
 
-        # Commit changes in database
-        db_connector.commit()
-        db_connector.close()
+            if new_task.capitalize() not in tasks_list:
 
-        # Clear task input
-        self.input_field.delete(0, END)
+                # Add task to list
+                self.list_of_tasks.insert(END, new_task.capitalize())
+
+                # Add task to database (all_tasks, task_to_do) tables
+                cursor.execute(f"""INSERT INTO all_tasks(id, name) VALUES(null, '{new_task.capitalize()}')""")
+                cursor.execute(f"""INSERT INTO task_to_do(id, name) VALUES(null, '{new_task.capitalize()}')""")
+
+                # Commit changes in database
+                db_connector.commit()
+
+                # Clear task input
+                self.input_field.delete(0, END)   
+
+            db_connector.close()
+            return new_task
+
+        return new_task
 
 
     # Get all tasks from db
@@ -256,19 +290,60 @@ class ToDoList():
 
     # Delete task from bd
     def delete_tast_in_db(self):
+        # Get name of task to delete from selected task
         task_to_delete = self.list_of_tasks.selection_get()
-        self.list_of_tasks.delete(ANCHOR)
-        db_connect = sqlite3.connect('to_do_list.db')
-        cursor = db_connect.cursor()
-        cursor.execute(f"""DELETE FROM all_tasks WHERE name='{task_to_delete}'""")
-        db_connect.commit()
-        db_connect.close()
+
+        if task_to_delete != '':
+
+            # Delete selected task in list
+            self.list_of_tasks.delete(ANCHOR)
+
+            # Connect to database
+            db_connect = sqlite3.connect('to_do_list.db')
+            cursor = db_connect.cursor()
+
+            # Delete task in database
+            cursor.execute(f"""DELETE FROM all_tasks WHERE name='{task_to_delete}'""")
+            cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_delete}'""")
+            cursor.execute(f"""DELETE FROM completed_tasks WHERE name='{task_to_delete}'""")
         
+            # Commit changes in database and close connections
+            db_connect.commit()
+            db_connect.close()
+
+            return task_to_delete
+        
+        return task_to_delete
 
 
     # Add task to completed list
     def add_to_completed_list(self):
-        pass
+        # Get name of task to transferred to list of completed task
+        task_to_transfer = self.list_of_tasks.selection_get()
+
+        if task_to_transfer != '':
+
+            # Delete selected task in task to do list
+            self.list_of_tasks.delete(ANCHOR)
+
+            # Connect to database
+            db_connect = sqlite3.connect('to_do_list.db')
+            cursor = db_connect.cursor()
+
+            # Delete task in "task to do" table in database
+            cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_transfer}'""")
+
+            # Add task to "completed task" table in database
+            cursor.execute(f"""INSERT INTO completed_tasks(id, name) VALUES(null, '{task_to_transfer.capitalize()}')""")
+
+            # Commit changes in database and close connections
+            db_connect.commit()
+            db_connect.close()
+
+            return task_to_transfer
+        
+        return task_to_transfer
+
 
 
     # Create Function Buttons
