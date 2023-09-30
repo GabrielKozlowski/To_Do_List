@@ -20,6 +20,7 @@ class ToDoList():
         # Frames
         self.options_frame = self.create_options_frame()
         self.tasks_frame = self.create_tasks_frame()
+        # self.email_frame = self.create_email_field()
 
         # Input field
         self.input_field = self.create_input_field()
@@ -52,8 +53,9 @@ class ToDoList():
 
 
         # Functions buttons
+        self.delete_button = self.create_delete_button()        
         self.add_to_completed_button = self.create_add_to_completed_button()
-        self.delete_button = self.create_delete_button()
+
 
         # Email button
         self.email_button = self.create_email_button()
@@ -169,59 +171,86 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasts db
+        # Get tasks from all_tasks db
         tasks = cursor.execute("""SELECT name FROM completed_tasks""")
         self.tasks = tasks
         self.show_list_of_task()
         return tasks
     
 
-    # Open email window
+
+
+    # Create email field
+    def create_email_field(self):
+        frame = Frame(self.tasks_frame, width=450, height=450, bg='green')
+        frame.pack()
+        return frame
+
+###########################################################################
     def email_window(self):
-        master = Tk()
-        master.title("New Window")
-        master.geometry("500x500")
+        # Hide tasks frame and buttons
+        self.list_of_tasks.forget()
+        self.delete_button.forget()
+        self.add_to_completed_button.forget()
+        self.list_scrollbar.place_forget()
 
-        own_email_address_field = Label(master, text="Your email address:")
-        passwd_to_email_field = Label(master, text="Password for email:")
-        email_address_to_send_field = Label(master, text ="Recipient Address:")
-        message_to_send_field = Label(master, text ="Message:")
+        # Display email frame
+        self.email_frame = self.create_email_field()
 
-        own_email_address_entry = Entry(master, width=40)
-        passwd_to_email_entry = Entry(master, width=40)
-        email_addres_to_send_entry = Entry(master, width=40)
-        message_to_send_entry = Entry(master, width=40)
 
-        send_email_buton = Button(master, width=20, text='Send Email')
+        own_email_address_field = Label(self.email_frame, text="Your email address:", fg='white', bg='green', font='bold')
+        passwd_to_email_field = Label(self.email_frame, text="Password for email:", fg='white', bg='green', font='bold')
+        email_address_to_send_field = Label(self.email_frame, text ="Recipient Address:", fg='white', bg='green', font='bold')
+        message_to_send_field = Label(self.email_frame, text ="Message:", fg='white', bg='green', font='bold')
+
+        own_email_address_entry = Entry(self.email_frame, width=30)
+        passwd_to_email_entry = Entry(self.email_frame, width=30)
+        email_address_to_send_entry = Entry(self.email_frame, width=30)
+        message_to_send_entry = Entry(self.email_frame, width=30)
+
+        send_email_button = Button(self.email_frame, width=20, text='Send Email')
         
-        choosen_field = Label(master, text="Which List You Want Send ?")
+        choosen_field = Label(self.email_frame, text="Which List You Want Send ?")
 
 
         choosen_list = IntVar()
-        Radiobutton(master, text="To Do", variable=choosen_list, value=1).grid(row=5, column=0)
-        Radiobutton(master, text="All Tasks", variable=choosen_list, value=2).grid(row=5, column=1)
-        Radiobutton(master, text="Completed", variable=choosen_list, value=3).grid(row=5, column=2)
+        Radiobutton(self.email_frame, text="To Do", variable=choosen_list, value=1).place(x=10, y=240)
+        Radiobutton(self.email_frame, text="All Tasks", variable=choosen_list, value=2).place(x=150, y=240)
+        Radiobutton(self.email_frame, text="Completed", variable=choosen_list, value=3).place(x=280, y=240)
 
-        own_email_address_field.grid(row=0, column=0)
-        own_email_address_entry.grid(row=0, column=1, columnspan=2)
-        passwd_to_email_field.grid(row=1, column=0)
-        passwd_to_email_entry.grid(row=1, column=1, columnspan=2)
-
-
-        email_address_to_send_field.grid(row=2, column=0)
-        email_addres_to_send_entry.grid(row=2, column=1, columnspan=2)
-
-        message_to_send_field.grid(row=3, column=0)
-        message_to_send_entry.grid(row=3, column=1, columnspan=2)
-
-        choosen_field.grid(row=4, column=1)
-
-        send_email_buton.grid(row=6, column=1)
-        
-
-        return master
+        own_email_address_field.place(x=10, y=18)
+        own_email_address_entry.place(x=200, y=20)
+        passwd_to_email_field.place(x=10, y=58)
+        passwd_to_email_entry.place(x=200, y=60)
 
 
+        email_address_to_send_field.place(x=10, y=98)
+        email_address_to_send_entry.place(x=200, y=100)
+
+        message_to_send_field.place(x=10, y=138)
+        message_to_send_entry.place(x=200, y=140)
+
+        choosen_field.place(x=120, y=178)
+
+        send_email_button.place(x=120, y=300)
+
+
+#####################################################################################
+
+
+
+
+
+
+
+
+
+    # Creates a frame for tasks list
+    def create_tasks_frame(self):
+        frame = Frame(self.window, width=50, height=550, bg='yellow')
+        frame.pack(expand=True, fill="both")
+        # self.email_frame.forgot()
+        return frame
 
 
     # Create input field
@@ -230,19 +259,12 @@ class ToDoList():
         field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
         return field
 
-    # Create add task button
 
+    # Create add task button
     def create_add_task_button(self):
         button = Button(self.options_frame, width=8, fg='white', bg='green', text="Add Task", command=self.add_task_to_list)
         button.grid(row=2, column=3, sticky='', padx=10, pady=20)
         return button
-
-
-    # Creates a frame for tasks list
-    def create_tasks_frame(self):
-        frame = Frame(self.window, width=50, height=550, bg='yellow')
-        frame.pack(expand=True, fill="both")
-        return frame
 
 
     # Create list of tasks
@@ -395,18 +417,19 @@ class ToDoList():
         return task_to_transfer
 
 
+    def create_add_to_completed_button(self):
+        add_to_completed_button = Button(self.tasks_frame, width=20, text="Add to completed", bg='green', fg="white", font='bold', command=self.add_to_completed_list)
+        add_to_completed_button.pack(side=BOTTOM)
+        return add_to_completed_button
+
 
     # Create Function Buttons
     def create_delete_button(self):
         delete_button = Button(self.tasks_frame, width=20, text="Delete task", bg="red", fg="white", font='bold', command=self.delete_tast_in_db)
-        delete_button.pack(side=RIGHT, padx=30)
+        delete_button.pack(side=BOTTOM, pady=10)
         return delete_button
         
 
-    def create_add_to_completed_button(self):
-        add_to_completed_button = Button(self.tasks_frame, width=20, text="Add to completed", bg='green', fg="white", font='bold', command=self.add_to_completed_list)
-        add_to_completed_button.pack(side=LEFT, padx=30)
-        return add_to_completed_button
 
 
 
