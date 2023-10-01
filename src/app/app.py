@@ -4,7 +4,7 @@ from email.message import EmailMessage
 import smtplib
 import sqlite3
 
-from my_functions.email_password import email_password
+from my_functions.email_password.email_password import email_password
 
 
 LIGHT_ORANGE = "#ffa64d"
@@ -750,11 +750,6 @@ class ToDoList():
                 self.send_error_box("Wrong Recipient Address !!! Try again.")
 
             
-
-
-
-
-
 
 
     # Run program

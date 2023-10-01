@@ -8,7 +8,7 @@ __pycache__/
 # My
 venv/
 .vscode/
-email_passwd
+email_password/
 
 
 # C extensions
