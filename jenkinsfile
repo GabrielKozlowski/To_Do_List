@@ -10,6 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 git 'https://github.com/GabrielKozlowski/To_Do_List.git'
+                sh 'python3 src/app/main.py'
             }
         }
         stage('Test') {
