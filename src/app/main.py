@@ -12,9 +12,9 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 # Import passwd from function
-from app.email_passwd.email_password import email_passwd
+# from app.email_passwd.email_password import email_passwd
 
-email_password = email_passwd()
+# email_password = email_passwd()
 
 
 # BackGround Color
@@ -612,8 +612,9 @@ class ToDoList():
     # Send email with tasks
     def send_email_with_tasks(self, my_email:str, email_passwd:str, email_to_send:str,subject:str, message:str, chosen_list_nr:int):
             # My email data         
-            my_email = "gabrielnauka2020@gmail.com"            
-            email_passwd = email_password
+            # my_email = "gabrielnauka2020@gmail.com"            
+            # email_passwd = email_password
+
             
             # Tags string for lists
             topTagTaskToDo = '\n\n---=== Task To Do ===---\n'
