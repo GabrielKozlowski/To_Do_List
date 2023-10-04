@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'python3 pip install matplotlib'
+                sh 'pip install matplotlib'
                 sh 'export DISPLAY=:0.0'
                 sh 'python3 -m pytest -vvv'  
             }
