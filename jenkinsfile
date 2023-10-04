@@ -3,13 +3,18 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            echo "Checkout"
+            steps {
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/GabrielKozlowski/To_Do_List.git']])
+            }
         }
         stage('Build') {
-            echo "Building"
+            steps {
+                git 'https://github.com/GabrielKozlowski/To_Do_List.git'
+                sh 'pythona3 tests/test_app.py'
+            }
         }
         stage('Test') {
-            echo "Testing"
+            sh 'python3 -m pytest -vvv'
         }
         stage('Deploy') {  
             echo "Deployed"
