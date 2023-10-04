@@ -1,4 +1,6 @@
 import os, sys
+import matplotlib
+
 
 # Add path to main file application 
 current = os.path.dirname(os.path.realpath(__file__))
@@ -7,6 +9,10 @@ sys.path.append(parent)
 
 # Import class from main 
 from src.app.main import ToDoList
+
+
+matplotlib.use('Agg')
+
 
 
 def test_test_():
