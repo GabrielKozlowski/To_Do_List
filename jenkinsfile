@@ -7,11 +7,9 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/GabrielKozlowski/To_Do_List.git']])
             }
         }
-        stage('Installing packages') {
+        stage('Build') {
             steps {
-                script {
-                    sh 'pip install -r requirements.txt'
-                }
+                git 'https://github.com/GabrielKozlowski/To_Do_List.git'
             }
         }
         stage('Test') {
