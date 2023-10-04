@@ -14,8 +14,6 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'apt install python3-matplotlib'
-                sh 'export DISPLAY=:0.0'
                 sh 'python3 -m pytest -vvv'  
             }
             
