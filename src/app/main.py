@@ -3,10 +3,21 @@ from tkinter import messagebox
 from email.message import EmailMessage
 import smtplib
 import sqlite3
+import sys, os
 
-from my_functions.email_password.email_password import email_password
+
+# Add path to email passwd func
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
+
+# Import passwd from function
+from app.email_passwd.email_password import email_passwd
+
+email_password = email_passwd()
 
 
+# BackGround Color
 LIGHT_ORANGE = "#ffa64d"
 
 
@@ -38,13 +49,13 @@ class ToDoList():
         self.completed_tasks_list_button = self.create_button_for_completed_tasks_list()
 
         # List for tasks
-        self.tasks = self.get_all_tasks_from_db()
+        self.tasks = self.get_to_do_tasks_from_db()
 
         # List of tasks
         self.list_of_tasks = self.create_list_of_tasks()
 
         # Show list of tasks
-        self.show_list = self.show_list_of_task()
+        self.show_list = self.show_list_of_tasks()
 
         # All task in list
         self.all_tasks = self.tasks_in_list()
@@ -69,7 +80,7 @@ class ToDoList():
 
 
 
-    def sqlite3_db(self):
+    def sqlite3_db(self):        
         # Create or connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
@@ -100,13 +111,10 @@ class ToDoList():
 
 
 
-
-
-
     # Creates a frame for options buttons
     def create_options_frame(self):
         frame = Frame(self.window, height=150, bg='red')
-        frame.pack(fill='both', expand=False)
+        frame.pack(fill='both', expand=False)        
         return frame
 
 
@@ -159,7 +167,7 @@ class ToDoList():
         # Get tasks from all_tasts db
         tasks = cursor.execute("""SELECT name FROM task_to_do""")
         self.tasks = tasks
-        self.show_list_of_task()
+        self.show_list_of_tasks()
         return tasks
     
 
@@ -174,7 +182,7 @@ class ToDoList():
         # Get tasks from all_tasts db
         tasks = cursor.execute("""SELECT name FROM all_tasks""")
         self.tasks = tasks
-        self.show_list_of_task()
+        self.show_list_of_tasks()
         return tasks
     
 
@@ -189,19 +197,19 @@ class ToDoList():
         # Get tasks from all_tasks db
         tasks = cursor.execute("""SELECT name FROM completed_tasks""")
         self.tasks = tasks
-        self.show_list_of_task()
+        self.show_list_of_tasks()
         return tasks
     
 
 
 
-    # Create email field
+    # Create email frame
     def create_email_field(self):
         frame = Frame(self.tasks_frame, width=450, height=450, bg='green')
         frame.pack()
         return frame
 
-###########################################################################
+
     def email_window(self, email_frame:bool):
         # Hide tasks frame and buttons
         self.list_of_tasks.forget()
@@ -284,18 +292,6 @@ class ToDoList():
         send_email_button.bind("<Button>", lambda e: self.send_email_with_tasks(own_email_address_entry.get(), passwd_to_email_entry.get(), email_address_to_send_entry.get(),subject_entry.get(), message_to_send_entry.get(),chosen_list_nr=(chosen_field1.get() + chosen_field2.get() + chosen_field3.get())))
 
 
-
-
-#####################################################################################
-
-
-
-
-
-
-
-
-
     # Creates a frame for tasks list
     def create_tasks_frame(self):
         frame = Frame(self.window, width=50, height=550, bg='yellow')
@@ -321,17 +317,17 @@ class ToDoList():
     def create_list_of_tasks(self):
         list_of_tasks = Listbox(self.tasks_frame, fg="white", bg="grey", width=52, height=12, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
         list_of_tasks.pack(pady=20, padx=30)
-
         return list_of_tasks
 
 
     # Show list of task
-    def show_list_of_task(self):
+    def show_list_of_tasks(self):
         # Get ListBox frame
         list_of_tasks = self.list_of_tasks
         list_of_tasks.delete(0, END)
 
         tasks = [task[0].capitalize() for task in self.tasks]
+
         for task in tasks:
             list_of_tasks.insert(END, task)
 
@@ -406,7 +402,6 @@ class ToDoList():
 
         # Get tasks from all_tasks db
         tasks = cursor.execute("""SELECT name FROM all_tasks""")
-
         return tasks
     
 
@@ -463,7 +458,7 @@ class ToDoList():
                 self.create_entry_for_update_task(task_to_update)
 
                 return task_to_update
-            
+
         except TclError as err:
             return err
             
@@ -480,33 +475,29 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()   
 
-        # Update tasks from 'task to do' db
+        # Update database task in table 'task to do'
         cursor.execute(f"""UPDATE task_to_do SET name='{updated_task}' WHERE name='{task_to_update}'""")
         
-        # Update tasks from 'all task' db
+        # Update database task in table 'all task'
         cursor.execute(f"""UPDATE all_tasks SET name='{updated_task}' WHERE name='{task_to_update}'""")
        
-        # Update tasks from 'completed tasks' db
+        # Update database task in table 'completed tasks'
         cursor.execute(f"""UPDATE completed_tasks SET name='{updated_task}' WHERE name='{task_to_update}'""")
 
         # Commit changes and close connection
         db_connector.commit()
         db_connector.close()
 
+        # Hide update frame
         self.update_frame.forget()
 
+        # Show list frame and buttons
         self.list_of_tasks.pack(pady=20, padx=30)
-
-
         self.delete_button.pack(side=BOTTOM, pady=10)
         self.edit_task_button.pack(side=BOTTOM)
-        self.add_to_completed_button.pack(side=BOTTOM, pady=10)
-        
-
-
-
-
+        self.add_to_completed_button.pack(side=BOTTOM, pady=10)        
         return updated_task
+
 
     # Create new entry for updates task
     def create_entry_for_update_task(self, task_to_update):
@@ -532,11 +523,8 @@ class ToDoList():
         update_button = Button(self.update_frame, text='Update', width=15, bg='green', fg='white', font='bold')
         update_button.pack(pady=150)
         update_button.bind("<Button>", lambda e: self.update_task(task_to_update, updated_task_entry.get()))
-
         return updated_task_entry
     
-
-
 
     # Delete task from bd
     def delete_task_in_db(self):
@@ -749,7 +737,6 @@ class ToDoList():
             except smtplib.SMTPRecipientsRefused:
                 self.send_error_box("Wrong Recipient Address !!! Try again.")
 
-            
 
 
     # Run program

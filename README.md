@@ -6,7 +6,7 @@
 <h2><b>General Info</b></h2>
 
 In this program we will can add new things to do in to the list. 
-When the thing it's done we can move it to list of doned things or we can delete it.
+When the thing it's done we can move it to list of done things or we can delete it.
 
 
 <h2><b>Technologies</b></h2>
@@ -14,7 +14,7 @@ When the thing it's done we can move it to list of doned things or we can delete
 <ul>
     <li>Python 3.11</li>
     <li>Tkinter 8.6</li>
-    <li>Tkinter 8.6</li>
+    <li>Pytest 7.4.2</li>
 
 </ul>
 
