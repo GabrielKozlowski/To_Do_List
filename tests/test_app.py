@@ -14,7 +14,7 @@ from src.app.main import ToDoList
 
 def test_create_options_frame():
     var = ToDoList().create_options_frame()
-    assert str(var) == '.!frame3'
+    assert str(var) == '.!frame'
 
 
 def test_create_tasks_frame():

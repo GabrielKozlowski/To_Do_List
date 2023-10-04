@@ -114,7 +114,7 @@ class ToDoList():
     # Creates a frame for options buttons
     def create_options_frame(self):
         frame = Frame(self.window, height=150, bg='red')
-        frame.pack(fill='both', expand=False)        
+        frame.pack(fill='both', expand=False)
         return frame
 
 
