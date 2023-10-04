@@ -18,7 +18,9 @@ sys.path.append(parent)
 
 
 # BackGround Color
-LIGHT_ORANGE = "#ffa64d"
+LIGHT_ORANGE = "#cf6f0e"
+MORE_LIGHT_ORANGE = '#ffcb96'
+# MORE_LIGHT_ORANGE = '#eb9a49'
 
 
 class ToDoList():
@@ -29,6 +31,7 @@ class ToDoList():
         self.window.geometry("500x700")
         self.window.resizable(0, 0)
         self.window.title("To Do List")
+        self.window.iconbitmap(r'E:/Programing/List_To_Do/To_Do_List/images/icon/List.ico')
         self.window.configure(background=LIGHT_ORANGE)
 
         self.database = self.sqlite3_db()
@@ -113,7 +116,7 @@ class ToDoList():
 
     # Creates a frame for options buttons
     def create_options_frame(self):
-        frame = Frame(self.window, height=150, bg='red')
+        frame = Frame(self.window, height=150, bg=LIGHT_ORANGE)
         frame.pack(fill='both', expand=False)
         return frame
 
@@ -164,7 +167,7 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasts db
+        # Get tasks from all_tasks db
         tasks = cursor.execute("""SELECT name FROM task_to_do""")
         self.tasks = tasks
         self.show_list_of_tasks()
@@ -179,7 +182,7 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasts db
+        # Get tasks from all_tasks db
         tasks = cursor.execute("""SELECT name FROM all_tasks""")
         self.tasks = tasks
         self.show_list_of_tasks()
@@ -205,7 +208,7 @@ class ToDoList():
 
     # Create email frame
     def create_email_field(self):
-        frame = Frame(self.tasks_frame, width=450, height=450, bg='green')
+        frame = Frame(self.tasks_frame, width=450, height=450, bg=LIGHT_ORANGE)
         frame.pack()
         return frame
 
@@ -223,7 +226,7 @@ class ToDoList():
         # # Display email frame
         if email_frame == False:
             self.email_frame.pack_forget()
-            self.list_of_tasks.pack()
+            self.list_of_tasks.pack(pady=20, padx=30)
             self.email_button = self.create_email_button()
             self.lists_button.grid_forget()
 
@@ -240,25 +243,25 @@ class ToDoList():
 
 
         # Create labels
-        own_email_address_field = Label(self.email_frame, text="Your email address:", fg='white', bg='green', font='bold')
-        passwd_to_email_field = Label(self.email_frame, text="Password to email:", fg='white', bg='green', font='bold')
-        email_address_to_send_field = Label(self.email_frame, text ="Recipient Address:", fg='white', bg='green', font='bold')
-        message_to_send_field = Label(self.email_frame, text ="Message:", fg='white', bg='green', font='bold')
-        subject_field = Label(self.email_frame, text="Subject:", fg='white', bg='green', font='bold')
+        own_email_address_field = Label(self.email_frame, text="Your email address:", bg=LIGHT_ORANGE, fg='white',font='bold')
+        passwd_to_email_field = Label(self.email_frame, text="Password to email:", bg=LIGHT_ORANGE, fg='white',font='bold')
+        email_address_to_send_field = Label(self.email_frame, text ="Recipient Address:", bg=LIGHT_ORANGE, fg='white',font='bold')
+        message_to_send_field = Label(self.email_frame, text ="Message:", bg=LIGHT_ORANGE, fg='white', font='bold')
+        subject_field = Label(self.email_frame, text="Subject:", bg=LIGHT_ORANGE, fg='white', font='bold')
 
         # Create entries
-        own_email_address_entry = Entry(self.email_frame, width=30)
-        passwd_to_email_entry = Entry(self.email_frame, width=30)
-        email_address_to_send_entry = Entry(self.email_frame, width=30)
-        message_to_send_entry = Entry(self.email_frame, width=30)
-        subject_entry = Entry(self.email_frame, width=30)
+        own_email_address_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
+        passwd_to_email_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
+        email_address_to_send_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
+        message_to_send_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
+        subject_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
 
         # Create send email button
         send_email_button = Button(self.email_frame, width=18, bg='green', fg='white', font='bold', text='Send Email')
         
 
         # Create message label
-        chosen_field = Label(self.email_frame, bg='green', fg='white', font='bold', text="Which List You Want Send ?")
+        chosen_field = Label(self.email_frame, bg=LIGHT_ORANGE, fg='white', font='bold', text="Which List You Want Send ?")
 
 
         # Place labels
@@ -282,9 +285,9 @@ class ToDoList():
         chosen_field1 = IntVar()
         chosen_field2 = IntVar()
         chosen_field3 = IntVar()
-        Radiobutton(self.email_frame, text="To Do",selectcolor='green', variable=chosen_field1, value=1, bg='green', fg='white').place(x=50, y=280)
-        Radiobutton(self.email_frame, text="All Tasks",selectcolor='green', variable=chosen_field2, value=2, bg='green', fg='white').place(x=150, y=280)
-        Radiobutton(self.email_frame, text="Completed",selectcolor='green', variable=chosen_field3, value=4, bg='green', fg='white').place(x=280, y=280)
+        Radiobutton(self.email_frame, text="To Do",selectcolor=LIGHT_ORANGE, variable=chosen_field1, value=1, bg=LIGHT_ORANGE, fg='white').place(x=50, y=280)
+        Radiobutton(self.email_frame, text="All Tasks",selectcolor=LIGHT_ORANGE, variable=chosen_field2, value=2, bg=LIGHT_ORANGE, fg='white').place(x=150, y=280)
+        Radiobutton(self.email_frame, text="Completed",selectcolor=LIGHT_ORANGE, variable=chosen_field3, value=4, bg=LIGHT_ORANGE, fg='white').place(x=280, y=280)
 
         # Place send email button
         send_email_button.place(x=110, y=360)
@@ -294,14 +297,14 @@ class ToDoList():
 
     # Creates a frame for tasks list
     def create_tasks_frame(self):
-        frame = Frame(self.window, width=50, height=550, bg='yellow')
+        frame = Frame(self.window, width=50, height=550, bg=LIGHT_ORANGE)
         frame.pack(expand=True, fill="both")
         return frame
 
 
     # Create input field
     def create_input_field(self):
-        field = Entry(self.options_frame, width=27, bg='gray', fg='white', font='Georgia 12')
+        field = Entry(self.options_frame, width=27, bg=MORE_LIGHT_ORANGE, fg='black', font='Georgia 12')
         field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
         return field
 
@@ -315,7 +318,7 @@ class ToDoList():
 
     # Create list of tasks
     def create_list_of_tasks(self):
-        list_of_tasks = Listbox(self.tasks_frame, fg="white", bg="grey", width=52, height=12, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
+        list_of_tasks = Listbox(self.tasks_frame, fg="black", bg=MORE_LIGHT_ORANGE, width=52, height=12, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
         list_of_tasks.pack(pady=20, padx=30)
         return list_of_tasks
 
@@ -337,7 +340,7 @@ class ToDoList():
     # Create scrollbar
     def create_scrollbar(self):
         list_scrollbar = Scrollbar(self.tasks_frame)
-        list_scrollbar.place(x=470, y=20, height=300)
+        list_scrollbar.place(x=470, y=20, height=289)
         return list_scrollbar
     
 
@@ -720,7 +723,7 @@ class ToDoList():
                 # Hide email frame
                 self.email_frame.pack_forget()
                 # Show list of tasks
-                self.list_of_tasks.pack()
+                self.list_of_tasks.pack(pady=20, padx=30)
                 # Show "delete" button
                 self.create_delete_button()  
                 # Show "edit task" button
