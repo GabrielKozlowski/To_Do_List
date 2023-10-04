@@ -9,12 +9,21 @@ sys.path.append(parent)
 from src.app.main import ToDoList
 
 
+def test_test_():
+    a = 12
+    assert a == 122
+
+def test_now():
+    print(56)
+    a = ToDoList().create_options_frame()
+    assert str(a) == '2'
+
 
 # Testing created frame in program
 
 def test_create_options_frame():
     var = ToDoList().create_options_frame()
-    assert str(var) == '.!frame'
+    assert str(var) == '.!frame3'
 
 
 def test_create_tasks_frame():
