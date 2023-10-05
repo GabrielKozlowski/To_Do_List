@@ -1,15 +1,12 @@
 # List Of Things To Do
-
 ### To Do List app in Python language.
 
 
 ## Lists of content
-
-https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#general-info
-https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#technologie
-https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#python-library
-https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#status
-
+* [General info](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#general-info)
+* [Technologies](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#technologie)
+* [Python library](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#python-library)
+* [Status](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#status)
 
 
 ## General Info
@@ -19,26 +16,20 @@ https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#status
 ### We have here 3 lists.
 
 ### To do list
-
-<img src="/images/to_do_tasks.png">
+<img src="/images/To_do_tasks.png">
 
 ### All tasks
-
-<img src="/images/all_tasks.png">
+<img src="/images/All_tasks.png">
 
 ### Completed tasks
-
-<img scr="/images/completed_tasks.png">
-
+<img scr="/images/Completed_tasks.png">
 
 ### We can edit and update task
-
 <img src="/images/update_task.png">
 
 
 ### And finally we can send to email one, two or all lists.
-
-<img src="/images/send_email.png">
+<img src="/images/Send_email.png">
 
 
 ## Technologie
