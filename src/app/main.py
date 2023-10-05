@@ -18,9 +18,9 @@ sys.path.append(parent)
 
 
 # BackGround Color
-LIGHT_ORANGE = "#cf6f0e"
-MORE_LIGHT_ORANGE = '#ffcb96'
-# MORE_LIGHT_ORANGE = '#eb9a49'
+APP_BACKGROUND = "#cf6f0e"
+INPUTS_BACKGROUND = '#ffcb96'
+BUTTONS_BACKGROUND = '#c44b00'
 
 
 class ToDoList():
@@ -32,7 +32,7 @@ class ToDoList():
         self.window.resizable(0, 0)
         self.window.title("To Do List")
         self.window.iconbitmap(r'E:/Programing/List_To_Do/To_Do_List/images/icon/List.ico')
-        self.window.configure(background=LIGHT_ORANGE)
+        self.window.configure(background=APP_BACKGROUND)
 
         self.database = self.sqlite3_db()
 
@@ -116,14 +116,14 @@ class ToDoList():
 
     # Creates a frame for options buttons
     def create_options_frame(self):
-        frame = Frame(self.window, height=150, bg=LIGHT_ORANGE)
+        frame = Frame(self.window, height=150, bg=APP_BACKGROUND)
         frame.pack(fill='both', expand=False)
         return frame
 
 
     # Create button for email
     def create_email_button(self):
-        email_button = Button(self.options_frame, width=20, bg='grey', fg='white', text="Send task to email")
+        email_button = Button(self.options_frame, width=20, bg=BUTTONS_BACKGROUND, fg='white', text="Send task to email")
         email_button.grid(row=1, column=1)    
         email_button.bind("<Button>",  lambda e: self.email_window(True))
         return email_button
@@ -131,7 +131,7 @@ class ToDoList():
 
     # Create button for lists
     def create_lists_button(self):
-        lists_button = Button(self.options_frame, width=20, bg='grey', fg='white', text="Back to all tasks")
+        lists_button = Button(self.options_frame, width=20, bg='#a82200', fg='white', text="Back to tasks list")
         lists_button.grid(row=1, column=1)          
         lists_button.bind("<Button>", lambda e: self.email_window(False))
         return lists_button  
@@ -140,22 +140,22 @@ class ToDoList():
 
     # Create button to list of tasks to do 
     def create_button_for_list_of_tasks_to_do(self):
-        button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Tasks to do", command=self.show_tasks_to_do_list)
-        button.grid(row=0, column=0, pady=20, sticky='')
+        button = Button(self.options_frame, width=15, bg=BUTTONS_BACKGROUND, fg='white', text="Tasks to do", command=self.show_tasks_to_do_list)
+        button.grid(row=0, column=0, padx=15, pady=20, sticky='')
         return button
 
 
     # Create button for all task to do list
     def create_button_for_all_task_list(self):
-        button = Button(self.options_frame, width=15, bg='grey', fg='white', text="All Tasks", command=self.show_all_tasks_list)
-        button.grid(row=0, column=1, pady=20, sticky='')
+        button = Button(self.options_frame, width=15, bg=BUTTONS_BACKGROUND, fg='white', text="All Tasks", command=self.show_all_tasks_list)
+        button.grid(row=0, column=1, padx=10, pady=20, sticky='')
         return button
     
 
     # Create button for completed tasks list
     def create_button_for_completed_tasks_list(self):
-        button = Button(self.options_frame, width=15, bg='grey', fg='white', text="Completed Tasks", command=self.show_completed_tasks_list)
-        button.grid(row=0, column=2, pady=20, padx=10, sticky='', columnspan=2)
+        button = Button(self.options_frame, width=15, bg=BUTTONS_BACKGROUND, fg='white', text="Completed Tasks", command=self.show_completed_tasks_list)
+        button.grid(row=0, column=2, pady=20, padx=20, sticky='', columnspan=2)
         return button
 
     
@@ -208,7 +208,7 @@ class ToDoList():
 
     # Create email frame
     def create_email_field(self):
-        frame = Frame(self.tasks_frame, width=450, height=450, bg=LIGHT_ORANGE)
+        frame = Frame(self.tasks_frame, width=450, height=450, bg=APP_BACKGROUND)
         frame.pack()
         return frame
 
@@ -221,6 +221,8 @@ class ToDoList():
         self.list_scrollbar.place_forget()
         self.email_button.grid_forget()
         self.edit_task_button.forget()
+        self.input_field.grid_forget()
+        self.button.grid_forget()
 
 
         # # Display email frame
@@ -230,12 +232,12 @@ class ToDoList():
             self.email_button = self.create_email_button()
             self.lists_button.grid_forget()
 
-            # Show "delete" button
+            # Show buttons lists and input
             self.delete_button.pack(side=BOTTOM, pady=10) 
-            # Show "edit task" button
             self.edit_task_button.pack(side=BOTTOM)
-            # Show "add to complete" button
             self.add_to_completed_button.pack(side=BOTTOM, pady=10)
+            self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
+            self.button.grid(row=2, column=3, sticky='', padx=10, pady=20)
 
         else:
             self.email_frame = self.create_email_field() 
@@ -243,25 +245,25 @@ class ToDoList():
 
 
         # Create labels
-        own_email_address_field = Label(self.email_frame, text="Your email address:", bg=LIGHT_ORANGE, fg='white',font='bold')
-        passwd_to_email_field = Label(self.email_frame, text="Password to email:", bg=LIGHT_ORANGE, fg='white',font='bold')
-        email_address_to_send_field = Label(self.email_frame, text ="Recipient Address:", bg=LIGHT_ORANGE, fg='white',font='bold')
-        message_to_send_field = Label(self.email_frame, text ="Message:", bg=LIGHT_ORANGE, fg='white', font='bold')
-        subject_field = Label(self.email_frame, text="Subject:", bg=LIGHT_ORANGE, fg='white', font='bold')
+        own_email_address_field = Label(self.email_frame, text="Your email address:", bg=APP_BACKGROUND, fg='white',font='bold')
+        passwd_to_email_field = Label(self.email_frame, text="Password to email:", bg=APP_BACKGROUND, fg='white',font='bold')
+        email_address_to_send_field = Label(self.email_frame, text ="Recipient Address:", bg=APP_BACKGROUND, fg='white',font='bold')
+        message_to_send_field = Label(self.email_frame, text ="Message:", bg=APP_BACKGROUND, fg='white', font='bold')
+        subject_field = Label(self.email_frame, text="Subject:", bg=APP_BACKGROUND, fg='white', font='bold')
 
         # Create entries
-        own_email_address_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
-        passwd_to_email_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
-        email_address_to_send_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
-        message_to_send_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
-        subject_entry = Entry(self.email_frame, width=30, bg=MORE_LIGHT_ORANGE)
+        own_email_address_entry = Entry(self.email_frame, width=30, bg=INPUTS_BACKGROUND)
+        passwd_to_email_entry = Entry(self.email_frame, width=30, bg=INPUTS_BACKGROUND)
+        email_address_to_send_entry = Entry(self.email_frame, width=30, bg=INPUTS_BACKGROUND)
+        message_to_send_entry = Entry(self.email_frame, width=30, bg=INPUTS_BACKGROUND)
+        subject_entry = Entry(self.email_frame, width=30, bg=INPUTS_BACKGROUND)
 
         # Create send email button
         send_email_button = Button(self.email_frame, width=18, bg='green', fg='white', font='bold', text='Send Email')
         
 
         # Create message label
-        chosen_field = Label(self.email_frame, bg=LIGHT_ORANGE, fg='white', font='bold', text="Which List You Want Send ?")
+        chosen_field = Label(self.email_frame, bg=APP_BACKGROUND, fg='white', font='bold', text="Which List You Want Send ?")
 
 
         # Place labels
@@ -285,9 +287,9 @@ class ToDoList():
         chosen_field1 = IntVar()
         chosen_field2 = IntVar()
         chosen_field3 = IntVar()
-        Radiobutton(self.email_frame, text="To Do",selectcolor=LIGHT_ORANGE, variable=chosen_field1, value=1, bg=LIGHT_ORANGE, fg='white').place(x=50, y=280)
-        Radiobutton(self.email_frame, text="All Tasks",selectcolor=LIGHT_ORANGE, variable=chosen_field2, value=2, bg=LIGHT_ORANGE, fg='white').place(x=150, y=280)
-        Radiobutton(self.email_frame, text="Completed",selectcolor=LIGHT_ORANGE, variable=chosen_field3, value=4, bg=LIGHT_ORANGE, fg='white').place(x=280, y=280)
+        Radiobutton(self.email_frame, text="To Do",selectcolor=APP_BACKGROUND, variable=chosen_field1, value=1, bg=APP_BACKGROUND, fg='white').place(x=50, y=280)
+        Radiobutton(self.email_frame, text="All Tasks",selectcolor=APP_BACKGROUND, variable=chosen_field2, value=2, bg=APP_BACKGROUND, fg='white').place(x=150, y=280)
+        Radiobutton(self.email_frame, text="Completed",selectcolor=APP_BACKGROUND, variable=chosen_field3, value=4, bg=APP_BACKGROUND, fg='white').place(x=280, y=280)
 
         # Place send email button
         send_email_button.place(x=110, y=360)
@@ -297,14 +299,14 @@ class ToDoList():
 
     # Creates a frame for tasks list
     def create_tasks_frame(self):
-        frame = Frame(self.window, width=50, height=550, bg=LIGHT_ORANGE)
+        frame = Frame(self.window, width=50, height=550, bg=APP_BACKGROUND)
         frame.pack(expand=True, fill="both")
         return frame
 
 
     # Create input field
     def create_input_field(self):
-        field = Entry(self.options_frame, width=27, bg=MORE_LIGHT_ORANGE, fg='black', font='Georgia 12')
+        field = Entry(self.options_frame, width=27, bg=INPUTS_BACKGROUND, fg='black', font='Georgia 12')
         field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
         return field
 
@@ -318,7 +320,7 @@ class ToDoList():
 
     # Create list of tasks
     def create_list_of_tasks(self):
-        list_of_tasks = Listbox(self.tasks_frame, fg="black", bg=MORE_LIGHT_ORANGE, width=52, height=12, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
+        list_of_tasks = Listbox(self.tasks_frame, fg="black", bg=INPUTS_BACKGROUND, width=52, height=12, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
         list_of_tasks.pack(pady=20, padx=30)
         return list_of_tasks
 
@@ -438,14 +440,16 @@ class ToDoList():
 
     # Create update frame
     def create_update_frame(self):
-        update_frame = Frame(self.tasks_frame, width=500, height=80, bg='blue')
+        update_frame = Frame(self.tasks_frame, width=500, height=80, bg=APP_BACKGROUND)
         update_frame.pack(expand=True, fill="both")
         return update_frame
 
 
+
+
+
     # Edit task
     def edit_task(self):
-
         try:
             # Get name of task to update from selected task
             task_to_update = self.list_of_tasks.selection_get()
@@ -476,7 +480,7 @@ class ToDoList():
         db_connector = sqlite3.connect('to_do_list.db')
 
         # Create cursor
-        cursor = db_connector.cursor()   
+        cursor = db_connector.cursor()
 
         # Update database task in table 'task to do'
         cursor.execute(f"""UPDATE task_to_do SET name='{updated_task}' WHERE name='{task_to_update}'""")
@@ -498,8 +502,40 @@ class ToDoList():
         self.list_of_tasks.pack(pady=20, padx=30)
         self.delete_button.pack(side=BOTTOM, pady=10)
         self.edit_task_button.pack(side=BOTTOM)
-        self.add_to_completed_button.pack(side=BOTTOM, pady=10)        
+        self.add_to_completed_button.pack(side=BOTTOM, pady=10)   
+
+        self.tasks_to_do_list_button.grid(row=0, column=0, pady=20, sticky='')
+        self.all_tasks_list_button.grid(row=0, column=1, pady=20, sticky='')
+        self.completed_tasks_list_button.grid(row=0, column=2, pady=20, padx=10, sticky='', columnspan=2)
+        self.email_button.grid(row=1, column=1)
+        self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
+        self.button.grid(row=2, column=3, sticky='', padx=10, pady=20)
+
+
         return updated_task
+
+    
+    # Create function for back to lists field
+    def back_to_lists(self, no_updated_task):
+        
+        # Hide update frame
+        self.update_frame.forget()
+
+        # Show list frame and buttons
+        self.list_of_tasks.pack(pady=20, padx=30)
+        self.delete_button.pack(side=BOTTOM, pady=10)
+        self.edit_task_button.pack(side=BOTTOM)
+        self.add_to_completed_button.pack(side=BOTTOM, pady=10)   
+        self.tasks_to_do_list_button.grid(row=0, column=0, pady=20, sticky='')
+        self.all_tasks_list_button.grid(row=0, column=1, pady=20, sticky='')
+        self.completed_tasks_list_button.grid(row=0, column=2, pady=20, padx=10, sticky='', columnspan=2)
+        self.email_button.grid(row=1, column=1)
+        self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
+        self.button.grid(row=2, column=3, sticky='', padx=10, pady=20)
+
+        # Insert to list not updated task
+        self.list_of_tasks.insert(END, no_updated_task)
+
 
 
     # Create new entry for updates task
@@ -511,23 +547,38 @@ class ToDoList():
         self.delete_button.forget()
         self.add_to_completed_button.forget()
         self.edit_task_button.pack_forget()
+        self.tasks_to_do_list_button.grid_forget()
+        self.all_tasks_list_button.grid_forget()
+        self.completed_tasks_list_button.grid_forget()
+        self.email_button.grid_forget()
+        self.input_field.grid_forget()
+        self.button.grid_forget()
+
 
 
         # Create label to update task in update form
-        updated_task_label = Label(self.update_frame, text="Update this task:", bg='blue', fg='white', font='bold')
-        updated_task_label.place(x=170, y=50)
+        updated_task_label = Label(self.update_frame, text="Update this task:", bg=APP_BACKGROUND, fg='white', font='Arial 16')
+        updated_task_label.place(x=40, y=40)
 
         # Create entry for update task in update form
-        updated_task_entry = Entry(self.update_frame, width=35, bg='grey', fg='white', font='bold')
+        updated_task_entry = Entry(self.update_frame, width=35, bg=INPUTS_BACKGROUND, fg='black', font='bold')
         updated_task_entry.insert(0, task_to_update)
         updated_task_entry.place(x=40, y=90)
 
+
         # Create button for update task
-        update_button = Button(self.update_frame, text='Update', width=15, bg='green', fg='white', font='bold')
-        update_button.pack(pady=150)
+        update_button = Button(self.update_frame, text='Update task', width=15, bg='green', fg='white', font='bold')
+        update_button.place(x=40, y=150)
         update_button.bind("<Button>", lambda e: self.update_task(task_to_update, updated_task_entry.get()))
+
+        # Create button for back to lists
+        back_button = Button(self.update_frame, text="Back to tasks", width=15,  bg="#a82200", fg="white", font="bold")
+        back_button.place(x=275, y=150)
+        back_button.bind("<Button>", lambda e: self.back_to_lists(task_to_update))
+
         return updated_task_entry
-    
+
+
 
     # Delete task from bd
     def delete_task_in_db(self):
@@ -752,3 +803,5 @@ class ToDoList():
 if __name__ == "__main__":
     TDL = ToDoList()
     TDL.run()
+
+
