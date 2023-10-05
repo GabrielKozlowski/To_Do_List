@@ -1,6 +1,7 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, PhotoImage
 from email.message import EmailMessage
+import plotly.express as px
 import smtplib
 import sqlite3
 import sys, os
@@ -80,7 +81,9 @@ class ToDoList():
         self.email_button = self.create_email_button()
 
 
+        self.pie_chart = self.create_pie_chart()
 
+        self.label_of_pie_chart = self.pie_chart_label()
 
 
     def sqlite3_db(self):        
@@ -336,8 +339,8 @@ class ToDoList():
 
     # Create list of tasks
     def create_list_of_tasks(self):
-        list_of_tasks = Listbox(self.tasks_frame, fg="black", bg=INPUTS_BACKGROUND, width=52, height=12, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
-        list_of_tasks.pack(pady=20, padx=30)
+        list_of_tasks = Listbox(self.tasks_frame, fg="black", bg=INPUTS_BACKGROUND, width=52, height=10, bd=0, highlightthickness=0, selectbackground='#5e5555', activestyle='none', font=12)
+        list_of_tasks.pack(pady=10, padx=30)
         return list_of_tasks
 
 
@@ -358,7 +361,7 @@ class ToDoList():
     # Create scrollbar
     def create_scrollbar(self):
         list_scrollbar = Scrollbar(self.tasks_frame)
-        list_scrollbar.place(x=470, y=20, height=289)
+        list_scrollbar.place(x=470, y=10, height=250)
         return list_scrollbar
     
 
@@ -434,9 +437,8 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasks db
+        # Get tasks from task to do db
         tasks = cursor.execute("""SELECT name FROM task_to_do""")
-
         return tasks
     
 
@@ -448,9 +450,8 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasks db
+        # Get tasks from completed tasks db
         tasks = cursor.execute("""SELECT name FROM completed_tasks""")
-
         return tasks
 
 
@@ -655,21 +656,24 @@ class ToDoList():
     # Create add task to completed list button
     def create_add_to_completed_button(self):
         add_to_completed_button = Button(self.tasks_frame, width=20, text="Add to completed", bg='green', fg="white", font='bold', command=self.add_to_completed_list)
-        add_to_completed_button.pack(side=BOTTOM, pady=10)
+        # add_to_completed_button.pack(side=BOTTOM, pady=10)
+        add_to_completed_button.place(x=20, y=320)
         return add_to_completed_button
 
 
     # Create update task button
     def create_edit_task_button(self):
         edit_task_button = Button(self.tasks_frame, width=20, text="Edit This Task", bg='blue', fg="white", font='bold', command=self.edit_task)
-        edit_task_button.pack(side=BOTTOM)
+        # edit_task_button.pack(side=BOTTOM)
+        edit_task_button.place(x=20, y=380)
         return edit_task_button
 
 
     # Create delete button
     def create_delete_button(self):
         delete_button = Button(self.tasks_frame, width=20, text="Delete task", bg="red", fg="white", font='bold', command=self.delete_task_in_db)
-        delete_button.pack(side=BOTTOM, pady=10)
+        # delete_button.pack(side=BOTTOM, pady=10)
+        delete_button.place(x=20, y=440)
         return delete_button
         
 
@@ -778,7 +782,7 @@ class ToDoList():
             msg['To'] = email_to_send
 
             try:
-                # Create smtplib SMPT object
+                # Create smtplib SMTP object
                 server = smtplib.SMTP('smtp.gmail.com', 587)
                 server.starttls()
 
@@ -807,6 +811,59 @@ class ToDoList():
 
             except smtplib.SMTPRecipientsRefused:
                 self.send_error_box("Wrong Recipient Address !!! Try again.")
+
+
+    def create_pie_chart(self):
+        # Connect to database
+        db_connector = sqlite3.connect('to_do_list.db')
+        # Create cursor
+        cursor = db_connector.cursor()
+
+        # Get tasks from task to do db
+        tasks_to_do = cursor.execute("""SELECT name FROM task_to_do""")
+
+        cursor = db_connector.cursor()
+        # Get tasks from completed tasks db
+        completed_tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+
+        cursor = db_connector.cursor()
+        # Get tasks from all_tasks db
+        all_tasks = cursor.execute("""SELECT name FROM all_tasks""")
+        # Close connection
+        # db_connector.close()
+
+        len_of_completed_tasks = len([task[0] for task in list(completed_tasks)])
+        len_of_tasks_to_do = len([task[0] for task in list(tasks_to_do)])
+        len_of_all_tasks = len([task[0] for task in list(all_tasks)])
+
+        field_names = [f"Completed Tasks: {len_of_completed_tasks}", f"Tasks To Do: {len_of_tasks_to_do}"]
+        field_values = [len_of_completed_tasks, len_of_tasks_to_do]
+
+        title = f"All tasks: {len_of_all_tasks}"
+        fig = px.pie(values=field_values, names=field_names,color_discrete_sequence=px.colors.sequential.Oranges_r, hole=0.4)
+
+        fig.update_layout(autosize=False,width=350,height=350,showlegend=False, paper_bgcolor=APP_BACKGROUND)
+        
+        
+
+        fig.update_traces(rotation=77,textposition='inside',
+                    title=title,
+                    title_font_color="white",
+                    textinfo='label+percent',
+                    textfont_size=12)
+       
+        fig.write_image("images/pie_chart.png")
+
+        
+
+        # fig.show()
+
+    def pie_chart_label(self):
+        image = PhotoImage(file="images/pie_chart.png")
+        chart = Label(self.tasks_frame, image=image, width=220, height=220)
+        chart.photo = image
+        chart.place(x=270, y=300)
+        return chart
 
 
 
