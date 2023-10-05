@@ -161,6 +161,11 @@ class ToDoList():
     
     # Show list of tasks to do
     def show_tasks_to_do_list(self):
+        # Changing fg and bg for clicked button
+        self.tasks_to_do_list_button.config(fg=APP_BACKGROUND, bg=INPUTS_BACKGROUND)
+        self.all_tasks_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
+        self.completed_tasks_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
+
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
@@ -176,6 +181,12 @@ class ToDoList():
 
     # Show list of tasks to do
     def show_all_tasks_list(self):
+        # Changing fg and bg for clicked button
+        self.tasks_to_do_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
+        self.all_tasks_list_button.config(fg=APP_BACKGROUND, bg=INPUTS_BACKGROUND)
+        self.completed_tasks_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
+
+
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
@@ -191,6 +202,11 @@ class ToDoList():
 
     # Show list of tasks to do
     def show_completed_tasks_list(self):
+        # Changing fg and bg for clicked button
+        self.tasks_to_do_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
+        self.all_tasks_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
+        self.completed_tasks_list_button.config(fg=APP_BACKGROUND, bg=INPUTS_BACKGROUND)
+
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
