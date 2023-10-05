@@ -16,20 +16,20 @@
 ### We have here 3 lists.
 
 ### To do list
-<img src="/images/To_do_tasks.png">
+<img src="/images/to_do_tasks.png">
 
 ### All tasks
-<img src="/images/All_tasks.png">
+<img src="/images/all_tasks.png">
 
 ### Completed tasks
-<img scr="/images/Completed_tasks.png">
+<img scr="/images/completed_tasks.png">
 
 ### We can edit and update task
 <img src="/images/update_task.png">
 
 
 ### And finally we can send to email one, two or all lists.
-<img src="/images/Send_email.png">
+<img src="/images/send_email.png">
 
 
 ## Technologie
