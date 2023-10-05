@@ -22,7 +22,7 @@
 <img src="/images/all_tasks.png">
 
 ### Completed tasks
-<img scr="/images/completed_tasks.png">
+<img src="/images/completed_tasks.png">
 
 ### We can edit and update task
 <img src="/images/update_task.png">
