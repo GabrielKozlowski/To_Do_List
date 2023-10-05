@@ -5,7 +5,10 @@
 
 ## Lists of content
 
-
+https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#general-info
+https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#technologie
+https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#python-library
+https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#status
 
 
 
