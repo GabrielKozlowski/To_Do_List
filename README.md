@@ -5,8 +5,8 @@
 ## Lists of content
 * [General info](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#general-info)
   
-    * ###[To do list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#to-do-list)  
-    ###* [All tasks list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#all-tasks)  
+    * [To do list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#to-do-list)  
+    ###*[All tasks list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#all-tasks)  
     * [Completed tasks list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#completed-tasks)  
     * [Edit & Update task](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#we-can-edit-and-update-task)  
     * [Send to email](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#and-finally-we-can-send-to-email-one-two-or-all-lists)
