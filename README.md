@@ -27,10 +27,11 @@
 ### We can edit and update task
 <img src="/images/update_task.png">
 
-
 ### And finally we can send to email one, two or all lists.
 <img src="/images/send_email.png">
 
+### There is a tasks widget, showing how many task we have, how many we want to do and how many we completed.
+<img src="/images/tasks_chart.png">
 
 ## Technologie
 
@@ -48,6 +49,7 @@
     <li>Sqlite3 - Database </li>
     <li>EmailMessage - To create email form</li>
     <li>Smtplib - Connect to email and send message</li>
+    <li>Plotly - To create a tasks widget</li>
     <li>sys, os</li>
 </ul>
 
