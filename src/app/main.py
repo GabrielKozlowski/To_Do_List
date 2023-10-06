@@ -11,7 +11,7 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
 
-# Import passwd from function
+# Import passwd from function in other folder
 # from app.email_passwd.email_password import email_passwd
 
 # email_password = email_passwd()
@@ -44,7 +44,7 @@ class ToDoList():
         self.input_field = self.create_input_field()
 
         # Submit Button
-        self.button = self.create_add_task_button()
+        self.add_task_button = self.create_add_task_button()
 
         # Lists buttons
         self.tasks_to_do_list_button = self.create_button_for_list_of_tasks_to_do()
@@ -116,9 +116,6 @@ class ToDoList():
         db_connector.close()
 
 
-
-
-
     # Creates a frame for options buttons
     def create_options_frame(self):
         frame = Frame(self.window, height=150, bg=APP_BACKGROUND)
@@ -128,7 +125,7 @@ class ToDoList():
 
     # Create button for email
     def create_email_button(self):
-        email_button = Button(self.options_frame, width=20, bg=BUTTONS_BACKGROUND, fg='white', text="Send task to email")
+        email_button = Button(self.options_frame, width=20, bg=BUTTONS_BACKGROUND, fg='white', text="Send tasks to email")
         email_button.grid(row=1, column=1)    
         email_button.bind("<Button>",  lambda e: self.email_window(True))
         return email_button
@@ -229,45 +226,38 @@ class ToDoList():
 
     # Create email frame
     def create_email_field(self):
-        frame = Frame(self.tasks_frame, width=450, height=450, bg=APP_BACKGROUND)
-        frame.pack()
+        frame = Frame(self.window, width=450, height=450, bg=APP_BACKGROUND)
+        frame.pack(expand=True, fill="both")
         return frame
 
 
     def email_window(self, email_frame:bool):
-        # Hide tasks frame and buttons
-        self.list_of_tasks.forget()
-        self.delete_button.place_forget()
-        self.add_to_completed_button.place_forget()
-        self.list_scrollbar.place_forget()
-        self.email_button.grid_forget()
-        self.edit_task_button.place_forget()
-        self.input_field.grid_forget()
-        self.button.grid_forget()
-        self.label_of_pie_chart.place_forget()
 
 
         # # Display email frame
         if email_frame == False:
+            # Hide email frame and back to lists button
             self.email_frame.pack_forget()
-            self.list_of_tasks.pack(pady=20, padx=30)
-            self.email_button = self.create_email_button()
             self.lists_button.grid_forget()
 
-            # Show buttons lists and input
-            self.delete_button.place(x=20, y=440)
-            self.edit_task_button.place(x=20, y=380)
-            self.add_to_completed_button.place(x=20, y=320)  
+            # Show tasks frame, buttons, lists and input
+            self.tasks_frame.pack(expand=True, fill="both")  
+            # self.email_button = self.create_email_button()
+            self.email_button.grid(row=1, column=1) 
+            self.list_of_tasks.pack(pady=10, padx=30)
             self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
-            self.button.grid(row=2, column=3, sticky='', padx=10, pady=20)
-
-            # Show widget
-            self.label_of_pie_chart.place(x=270, y=300)
+            self.add_task_button.grid(row=2, column=3, sticky='', padx=10, pady=20)
 
         else:
+            # Hide tasks frame and buttons
+            self.tasks_frame.forget()
+            self.email_button.grid_forget()             
+            self.input_field.grid_forget()
+            self.add_task_button.grid_forget()     
+
+            # Create email frame and back to list button
             self.email_frame = self.create_email_field() 
             self.lists_button = self.create_lists_button()
-            self.label_of_pie_chart.place_forget()
 
 
         # Create labels
@@ -287,10 +277,8 @@ class ToDoList():
         # Create send email button
         send_email_button = Button(self.email_frame, width=18, bg='green', fg='white', font='bold', text='Send Email')
         
-
         # Create message label
         chosen_field = Label(self.email_frame, bg=APP_BACKGROUND, fg='white', font='bold', text="Which List You Want Send ?")
-
 
         # Place labels
         own_email_address_field.place(x=10, y=18)
@@ -321,6 +309,7 @@ class ToDoList():
         send_email_button.place(x=110, y=360)
         # When button click, sends data to send email function
         send_email_button.bind("<Button>", lambda e: self.send_email_with_tasks(own_email_address_entry.get(), passwd_to_email_entry.get(), email_address_to_send_entry.get(),subject_entry.get(), message_to_send_entry.get(),chosen_list_nr=(chosen_field1.get() + chosen_field2.get() + chosen_field3.get())))
+
 
 
     # Creates a frame for tasks list
@@ -389,8 +378,6 @@ class ToDoList():
         # Get task name from input
         new_task = self.input_field.get()
         if new_task != '':
-
-
             # Connect to database
             db_connector = sqlite3.connect('to_do_list.db')
 
@@ -414,9 +401,9 @@ class ToDoList():
                 # Commit changes in database
                 db_connector.commit()
 
-                # Update tasks wigdet
+                # Update tasks widget
                 self.create_pie_chart()
-                self.pie_chart_label()
+                self.update_pie_chart_label()
 
                 # Clear task input
                 self.input_field.delete(0, END)   
@@ -527,7 +514,7 @@ class ToDoList():
         self.update_frame.forget()
 
         # Show list frame and buttons
-        self.list_of_tasks.pack(pady=20, padx=30)
+        self.list_of_tasks.pack(pady=10, padx=30)
 
         self.tasks_to_do_list_button.grid(row=0, column=0, padx=15, pady=20, sticky='')
         self.all_tasks_list_button.grid(row=0, column=1, padx=10, pady=20, sticky='')
@@ -535,7 +522,7 @@ class ToDoList():
         self.email_button.grid(row=1, column=1)
 
         self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
-        self.button.grid(row=2, column=3, sticky='', padx=10, pady=20)
+        self.add_task_button.grid(row=2, column=3, sticky='', padx=10, pady=20)
 
         self.delete_button.place(x=20, y=440)
         self.edit_task_button.place(x=20, y=380)
@@ -554,7 +541,7 @@ class ToDoList():
         self.update_frame.forget()
 
         # Show list frame and buttons
-        self.list_of_tasks.pack(pady=20, padx=30)
+        self.list_of_tasks.pack(pady=10, padx=30)
 
         self.tasks_to_do_list_button.grid(row=0, column=0, padx=15, pady=20, sticky='')
         self.all_tasks_list_button.grid(row=0, column=1, padx=10, pady=20, sticky='')
@@ -562,7 +549,7 @@ class ToDoList():
         self.email_button.grid(row=1, column=1)
         
         self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
-        self.button.grid(row=2, column=3, sticky='', padx=10, pady=20)
+        self.add_task_button.grid(row=2, column=3, sticky='', padx=10, pady=20)
         
         self.delete_button.place(x=20, y=440)
         self.edit_task_button.place(x=20, y=380)
@@ -592,7 +579,7 @@ class ToDoList():
         self.completed_tasks_list_button.grid_forget()
         self.email_button.grid_forget()
         self.input_field.grid_forget()
-        self.button.grid_forget()
+        self.add_task_button.grid_forget()
 
 
 
@@ -644,9 +631,9 @@ class ToDoList():
             db_connect.commit()
             db_connect.close()
 
-            # Update tasks wigdet
+            # Update tasks widget
             self.create_pie_chart()
-            self.pie_chart_label()
+            self.update_pie_chart_label()
 
             return task_to_delete
         
@@ -660,27 +647,36 @@ class ToDoList():
 
         if task_to_transfer != '':
 
-            # Delete selected task in task to do list
-            self.list_of_tasks.delete(ANCHOR)
-
             # Connect to database
             db_connect = sqlite3.connect('to_do_list.db')
-            cursor = db_connect.cursor()
+            cursor = db_connect.cursor()    
 
-            # Delete task in "task to do" table in database
-            cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_transfer}'""")
+            completed_tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+            completed_tasks = [task[0] for task in list(completed_tasks)]
+            
+            if task_to_transfer not in completed_tasks:
 
-            # Add task to "completed task" table in database
-            cursor.execute(f"""INSERT INTO completed_tasks(id, name) VALUES(null, '{task_to_transfer.capitalize()}')""")
+                # Delete selected task in task to do list
+                self.list_of_tasks.delete(ANCHOR)
 
-            # Commit changes in database and close connections
-            db_connect.commit()
-            db_connect.close()
 
-            # Update tasks wigdet
-            self.create_pie_chart()
-            self.pie_chart_label()
 
+                # Delete task in "task to do" table in database
+                cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_transfer}'""")
+
+                # Add task to "completed task" table in database
+                cursor.execute(f"""INSERT INTO completed_tasks(id, name) VALUES(null, '{task_to_transfer.capitalize()}')""")
+
+                # Commit changes in database and close connections
+                db_connect.commit()
+                db_connect.close()
+
+                # Update tasks widget
+                self.create_pie_chart()
+                self.update_pie_chart_label()
+
+                return task_to_transfer
+            
             return task_to_transfer
         
         return task_to_transfer
@@ -820,18 +816,15 @@ class ToDoList():
                 # Send message
                 server.send_message(msg)
 
-                # Hide email frame
+                # Hide email frame and button back to list
                 self.email_frame.pack_forget()
-                # Show list of tasks
-                self.list_of_tasks.pack(pady=20, padx=30)
-                # Show "delete" button
-                self.create_delete_button()  
-                # Show "edit task" button
-                self.create_edit_task_button()
-                # Show "add to complete" button
-                self.create_add_to_completed_button()
-                # Show scrollbar
-                self.list_scrollbar.place()
+                self.lists_button.grid_forget()
+
+                # Show tasks frame , input and buttons (add, send to email)
+                self.tasks_frame.pack(expand=True, fill="both")
+                self.email_button.grid(row=1, column=1) 
+                self.input_field.grid(row=2, column=0, columnspan=3, padx=30, pady=20)
+                self.add_task_button.grid(row=2, column=3, sticky='', padx=10, pady=20)
 
 
             # Catch ten errors
@@ -908,13 +901,24 @@ class ToDoList():
 
         fig.write_image("images/pie_chart.png")
 
-  
+
+    # Create pie chart label
     def pie_chart_label(self):
         image = PhotoImage(file="images/pie_chart.png")
-        chart = Label(self.tasks_frame, image=image, width=220, height=220)
-        chart.photo = image
-        chart.place(x=270, y=300)
-        return chart
+        label_of_pie_chart = Label(self.tasks_frame, image=image, width=220, height=220)
+        label_of_pie_chart.photo = image
+        label_of_pie_chart.place(x=270, y=300)
+        return label_of_pie_chart
+
+
+    # Update pie chart label
+    def update_pie_chart_label(self):
+        self.label_of_pie_chart.place_forget()
+        image = PhotoImage(file="images/pie_chart.png")
+        label_of_pie_chart = Label(self.tasks_frame, image=image, width=220, height=220)
+        label_of_pie_chart.photo = image
+        label_of_pie_chart.place(x=270, y=300)
+        return label_of_pie_chart
 
 
 
