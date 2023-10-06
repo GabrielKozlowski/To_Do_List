@@ -4,7 +4,6 @@
 
 ## Lists of content
 * [General info](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#general-info)
-###<ul>
     * [To do list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#to-do-list)  
     * [All tasks list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#all-tasks)  
     * [Completed tasks list](https://github.com/GabrielKozlowski/To_Do_List/blob/master/README.md#completed-tasks)  
