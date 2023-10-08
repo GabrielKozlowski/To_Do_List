@@ -39,7 +39,7 @@
 ### There is a tasks widget, showing how many task we have, how many we want to do and how many we completed.
 <img src="/images/tasks_chart.png">
 
-## Technologie
+## Technologies
 
 <ul>
     <li>Python 3.11</li>
