@@ -1,108 +1,163 @@
 import os, sys
 
-
 # Add path to main file application 
 current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
 
 # Import class from main 
+# from src.app.main import ToDoList
 from src.app.main import ToDoList
 
 
-
-
+window = ToDoList()
+a = ToDoList
+print(str(a.create_options_frame))
+print(str(window.create_options_frame()))
 
 # Testing created frame in program
 
 def test_create_options_frame():
-    var = ToDoList().create_options_frame()
-    assert str(var) == '.!frame3'
+    var = window.create_options_frame()    
+    assert str(var) == '.!frame4'
 
 
 def test_create_tasks_frame():
-    var = ToDoList().create_tasks_frame()
-    assert str(var) == ".!frame3"
+    var = window.create_tasks_frame()
+    assert str(var) == ".!frame5"
 
 
-def test_update_frame():
-    var = ToDoList().create_update_frame()
+def test_create_update_frame():
+    var = window.create_update_frame()
     assert str(var) == ".!frame2.!frame"
 
 
+def test_update_frame():
+    var = window.create_update_frame()
+    assert str(var) == ".!frame2.!frame2"
+
+
 def test_create_list_of_tasks():
-    var = ToDoList().create_list_of_tasks()
+    var = window.create_list_of_tasks()
     assert str(var) == ".!frame2.!listbox2"
 
 
 # Testing created scrollbar
 def test_create_scrollbar():
-    var = ToDoList().create_scrollbar()
+    var = window.create_scrollbar()
     assert str(var) == ".!frame2.!scrollbar2"
 
 
 # Testing created buttons
 
 def test_create_add_task_button():
-    var = ToDoList().create_add_task_button()
+    var = window.create_add_task_button()
     assert str(var) == ".!frame.!button6"
 
 
 def test_create_add_to_completed_button():
-    var = ToDoList().create_add_to_completed_button()
+    var = window.create_add_to_completed_button()
     assert str(var) == ".!frame2.!button4"
 
 
+def test_create_edit_task_button():
+    var = window.create_edit_task_button()
+    assert str(var) == ".!frame2.!button5"
+
+
+def test_create_delete_button():
+    var = window.create_delete_button()
+    assert str(var) == ".!frame2.!button6"
+
+
 def test_create_email_button():
-    var = ToDoList().create_email_button()
-    assert str(var) == ".!frame.!button6"
+    var = window.create_email_button()
+    assert str(var) == ".!frame.!button7"
+
 
 def test_create_button_for_list_of_tasks_to_do():
-    var = ToDoList().create_button_for_list_of_tasks_to_do()
-    assert str(var) == ".!frame.!button6"
+    var = window.create_button_for_list_of_tasks_to_do()
+    assert str(var) == ".!frame.!button8"
 
 
 def test_create_button_for_all_task_list():
-    var = ToDoList().create_button_for_all_task_list()
-    assert str(var) == ".!frame.!button6"
+    var = window.create_button_for_all_task_list()
+    assert str(var) == ".!frame.!button9"
 
 
 def test_create_button_for_completed_tasks_list():
-    var = ToDoList().create_button_for_completed_tasks_list()
-    assert str(var) == ".!frame.!button6"
+    var = window.create_button_for_completed_tasks_list()
+    assert str(var) == ".!frame.!button10"
 
 
 def test_create_lists_button():
-    var = ToDoList().create_lists_button()
-    assert str(var) == ".!frame.!button6"
+    var = window.create_lists_button()
+    assert str(var) == ".!frame.!button11"
 
 
-# Testing created fields and inputs
+# # Testing created fields and inputs
 
 def test_create_email_field():
-    var = ToDoList().create_email_field()
-    assert str(var) == ".!frame2.!frame"
+    var = window.create_email_field()
+    assert str(var) == ".!frame6"
 
 
 def test_create_input_field():
-    var = ToDoList().create_input_field()
+    var = window.create_input_field()
     assert str(var) == ".!frame.!entry2"
 
 
 
 # Testing created entry for update task
 def test_create_entry_for_update_task():
-    var = ToDoList().create_entry_for_update_task('sample')
-    assert str(var) == ".!frame2.!frame.!entry"
+    var = window.create_entry_for_update_task('sample')
+    assert str(var) == ".!frame2.!frame3.!entry"
 
 
 # Testing showing list of tasks
 def test_show_list_of_tasks():
-    var = ToDoList().show_list_of_tasks()
+    var = window.show_list_of_tasks()
     assert str(var) == ".!frame2.!listbox"
 
 
 # Testing is it string
 def test_tasks_in_list():
-    var = ToDoList().tasks_in_list()
+    var = window.tasks_in_list()
     assert var == ''
+
+
+# Testing if new task is string
+def test_add_task_to_list():
+    var = window.add_task_to_list()
+    assert isinstance(var, str) == True
+
+
+# Testing error message
+def test_send_error1_box():
+    error = "Email Address or Password incorrect !!! Try again."
+    var = window.send_error_box(error=error)
+    assert str(var) == "Email Address or Password incorrect !!! Try again."
+
+
+# Testing error message
+def test_send_error2_box():
+    error = "Wrong Recipient Address !!! Try again."
+    var = window.send_error_box(error=error)
+    assert str(var) == "Wrong Recipient Address !!! Try again."
+
+
+# Testing pie chart label
+def test_pie_chart_label():
+    var = window.pie_chart_label()
+    assert str(var) == ".!frame2.!label2"
+
+
+def test_update_pie_chart_label():
+    var = window.update_pie_chart_label()
+    assert str(var) == ".!frame2.!label3"
+
+
+    ###############################################################################
+
+    def test_show_tasks_to_do_list():
+        pass

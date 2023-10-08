@@ -31,7 +31,7 @@ class ToDoList():
         self.window.geometry("500x700")
         self.window.resizable(0, 0)
         self.window.title("To Do List")
-        self.window.iconbitmap(r'E:/Programing/List_To_Do/To_Do_List/images/icon/List.ico')
+        self.window.iconbitmap(r'./images/icon/List.ico')
         self.window.configure(background=APP_BACKGROUND)
 
         self.database = self.sqlite3_db()
