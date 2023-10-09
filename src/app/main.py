@@ -14,11 +14,11 @@ sys.path.append(parent)
 
 # Import passwd from function in other folder
 from app.email_passwd.email_password import email_passwd
-
+# Set SMTP email password
 email_password = email_passwd()
 
 
-# BackGround Color
+# BackGround Colors
 APP_BACKGROUND = "#cf6f0e"
 INPUTS_BACKGROUND = '#ffcb96'
 BUTTONS_BACKGROUND = '#c44b00'
@@ -35,6 +35,7 @@ class ToDoList():
         self.window.iconbitmap(r'./images/icon/List.ico')
         self.window.configure(background=APP_BACKGROUND)
 
+        # Create database
         self.database = self.sqlite3_db()
 
         # Frames
@@ -83,12 +84,13 @@ class ToDoList():
         # Email button
         self.email_button = self.create_email_button()
 
-
+        # Create pie chart
         self.pie_chart = self.create_pie_chart()
-
+        # Create label of pie chart
         self.label_of_pie_chart = self.pie_chart_label()
 
 
+    # Create database
     def sqlite3_db(self):        
         # Create or connect to database
         db_connector = sqlite3.connect('to_do_list.db')
@@ -175,9 +177,13 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasks db
+        # Get tasks from 'task to do' db
         tasks = cursor.execute("""SELECT name FROM task_to_do""")
+        
+        # Set tasks from task to do
         self.tasks = tasks
+        
+        # Show tasks in list
         self.show_list_of_tasks()
         return tasks
     
@@ -189,16 +195,19 @@ class ToDoList():
         self.all_tasks_list_button.config(fg=APP_BACKGROUND, bg=INPUTS_BACKGROUND)
         self.completed_tasks_list_button.config(fg="white", bg=BUTTONS_BACKGROUND)
 
-
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasks db
+        # Get tasks from 'all_tasks' db
         tasks = cursor.execute("""SELECT name FROM all_tasks""")
+
+        # Set tasks from all tasks
         self.tasks = tasks
+
+        # Show tasks in list
         self.show_list_of_tasks()
         return tasks
     
@@ -216,9 +225,13 @@ class ToDoList():
         # Create cursor
         cursor = db_connector.cursor()
 
-        # Get tasks from all_tasks db
+        # Get tasks from 'completed tasks' db
         tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+
+        # Set tasks from completed tasks
         self.tasks = tasks
+
+        # Show tasks in list
         self.show_list_of_tasks()
         return tasks
     
@@ -233,9 +246,6 @@ class ToDoList():
 
 
     def email_window(self, email_frame:bool):
-
-
-        # # Display email frame
         if email_frame == False:
             # Hide email frame and back to lists button
             self.email_frame.pack_forget()
@@ -243,6 +253,7 @@ class ToDoList():
 
             # Show tasks frame, buttons, lists and input
             self.tasks_frame.pack(expand=True, fill="both")  
+
             # self.email_button = self.create_email_button()
             self.email_button.grid(row=1, column=1) 
             self.list_of_tasks.pack(pady=10, padx=30)
@@ -308,6 +319,7 @@ class ToDoList():
 
         # Place send email button
         send_email_button.place(x=110, y=360)
+
         # When button click, sends data to send email function
         send_email_button.bind("<Button>", lambda e: self.send_email_with_tasks(own_email_address_entry.get(), passwd_to_email_entry.get(), email_address_to_send_entry.get(),subject_entry.get(), message_to_send_entry.get(),chosen_list_nr=(chosen_field1.get() + chosen_field2.get() + chosen_field3.get())))
 
@@ -346,8 +358,10 @@ class ToDoList():
         list_of_tasks = self.list_of_tasks
         list_of_tasks.delete(0, END)
 
+        # Create list of tasks
         tasks = [task[0].capitalize() for task in self.tasks]
 
+        # Insert tasks in showing list
         for task in tasks:
             list_of_tasks.insert(END, task)
 
@@ -375,9 +389,11 @@ class ToDoList():
 
     # Add task to db lists
     def add_task_to_list(self):
+
         # Get task name from input
         new_task = self.input_field.get()
         if new_task != '':
+
             # Connect to database
             db_connector = sqlite3.connect('to_do_list.db')
 
@@ -386,6 +402,7 @@ class ToDoList():
 
             # Get all tasks name
             tasks = cursor.execute("""SELECT name FROM all_tasks""")
+
             # Convert to list
             tasks_list = [task[0] for task in list(tasks)]
 
@@ -416,6 +433,7 @@ class ToDoList():
 
     # Get all tasks from db
     def get_all_tasks_from_db(self):
+
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
@@ -429,6 +447,7 @@ class ToDoList():
 
     # Get to do tasks from db
     def get_to_do_tasks_from_db(self):
+
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
@@ -442,6 +461,7 @@ class ToDoList():
 
     # Get completed tasks from db
     def get_completed_tasks_from_db(self):
+
         # Connect to database
         db_connector = sqlite3.connect('to_do_list.db')
 
@@ -458,9 +478,6 @@ class ToDoList():
         update_frame = Frame(self.tasks_frame, width=500, height=80, bg=APP_BACKGROUND)
         update_frame.pack(expand=True, fill="both")
         return update_frame
-
-
-
 
 
     # Edit task
@@ -481,8 +498,9 @@ class ToDoList():
 
                 return task_to_update
 
-        except TclError as err:
-            return err
+        except:
+            # If not selected task to edit, open error window
+            return self.send_error_box("Selecting error.", "Select task to edit.")
             
 
     # Edit and Update task in lists
@@ -555,18 +573,16 @@ class ToDoList():
         self.edit_task_button.place(x=20, y=380)
         self.add_to_completed_button.place(x=20, y=320) 
 
-
         # Show widget
         self.label_of_pie_chart.place(x=270, y=300)
-
 
         # Insert to list not updated task
         self.list_of_tasks.insert(END, no_updated_task)
 
 
-
     # Create new entry for updates task
     def create_entry_for_update_task(self, task_to_update):
+
         # Show update form
         self.update_frame = self.create_update_frame()
 
@@ -581,8 +597,6 @@ class ToDoList():
         self.input_field.grid_forget()
         self.add_task_button.grid_forget()
 
-
-
         # Create label to update task in update form
         updated_task_label = Label(self.update_frame, text="Update this task:", bg=APP_BACKGROUND, fg='white', font='Arial 16')
         updated_task_label.place(x=40, y=40)
@@ -591,7 +605,6 @@ class ToDoList():
         updated_task_entry = Entry(self.update_frame, width=35, bg=INPUTS_BACKGROUND, fg='black', font='bold')
         updated_task_entry.insert(0, task_to_update)
         updated_task_entry.place(x=40, y=90)
-
 
         # Create button for update task
         update_button = Button(self.update_frame, text='Update task', width=15, bg='green', fg='white', font='bold')
@@ -639,12 +652,12 @@ class ToDoList():
             return task_to_delete
         
         except:
+            # If not selected task to delete, open error window
             return self.send_error_box("Selecting error.", "Select task to delete")
 
 
     # Add task to completed list
     def add_to_completed_list(self):
-
         try:
             # Get name of task to transferred to list of completed task
             task_to_transfer = self.list_of_tasks.selection_get()
@@ -655,15 +668,17 @@ class ToDoList():
                 db_connect = sqlite3.connect('to_do_list.db')
                 cursor = db_connect.cursor()    
 
+                # Get tasks from completed tasks list
                 completed_tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+
+                # Create completed tasks list 
                 completed_tasks = [task[0] for task in list(completed_tasks)]
                 
+                # Check if task to transfer is in completed tasks list
                 if task_to_transfer not in completed_tasks:
 
                     # Delete selected task in task to do list
                     self.list_of_tasks.delete(ANCHOR)
-
-
 
                     # Delete task in "task to do" table in database
                     cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_transfer}'""")
@@ -686,6 +701,7 @@ class ToDoList():
             return task_to_transfer
 
         except:
+            # If not selected task to transfer, open error window
             return self.send_error_box("Selecting error.", "Select the task you want to add to your completed list")
 
 
@@ -722,7 +738,6 @@ class ToDoList():
             # my_email = "gabrielnauka2020@gmail.com"            
             # email_passwd = email_password
 
-            
             # Tags string for lists
             topTagTaskToDo = '\n\n---=== Task To Do ===---\n'
             topTagAllTasks = '\n\n---=== All Tasks ===---\n'
@@ -862,6 +877,7 @@ class ToDoList():
                 self.send_error_box("Connect Error", "Email account dose'nt exists")
 
             finally:
+                    # Close email frame and show tasks frame
                     self.email_frame.pack_forget()
                     self.lists_button.grid_forget()
                     self.tasks_frame.pack(expand=True, fill="both")
@@ -901,13 +917,16 @@ class ToDoList():
         # Create title with len of all tasks
         title = f"All tasks<br>{len_of_all_tasks}"
 
+        # Check if there are any tasks
         if len_of_all_tasks > 0:
+
+            # Create pie chart
             fig = px.pie(values=field_values, names=field_names, color=field_names, hole=0.35, color_discrete_map={(str(len_of_completed_tasks) + "<br>Completed Tasks") : "#458B00", (str(len_of_tasks_to_do)  + "<br>Tasks To Do") : "#FFA500"})
 
+            # Set widget specifications and size
             fig.update_layout(autosize=False, width=350, height=350, showlegend=False, paper_bgcolor=APP_BACKGROUND)
             
-
-    
+            # Set chart specifications
             fig.update_traces(direction="clockwise",sort=False, rotation=90, textposition='inside',
                         title=title,
                         title_font_color="white",
@@ -915,17 +934,24 @@ class ToDoList():
                         textfont_size=14,
                         textfont_color='white')
             
+            # If are only completed tasks rotate chart to 180
             if len_of_completed_tasks <= 0:
                 fig.update_traces(rotation=180)
 
+            # If are only tasks to do rotate chart to 0
             elif len_of_tasks_to_do <= 0:
                 fig.update_traces(rotation=0)
        
+       # If not tasks
         else:
+
+            # Create pie chart
             fig = px.pie(values=[1,0], names=['Waiting for task',''], hole=0.35, color=['Waiting for task',''], color_discrete_map={'Waiting for task': INPUTS_BACKGROUND, '': INPUTS_BACKGROUND})
 
+            # Set widget specifications and size
             fig.update_layout(autosize=False, width=350, height=350, showlegend=False, paper_bgcolor=APP_BACKGROUND)
 
+             # Set chart specifications
             fig.update_traces(direction="clockwise",sort=False, rotation=0, textposition='inside',
                         title=title,
                         title_font_color="white",
@@ -933,6 +959,7 @@ class ToDoList():
                         textfont_size=18,
                         textfont_color='black')
 
+        # Save image of pie chart in folder
         fig.write_image("images/pie_chart.png")
 
 
@@ -955,9 +982,7 @@ class ToDoList():
         return label_of_pie_chart
 
 
-
     # Run program
-
     def run(self):
         self.window.mainloop()
 

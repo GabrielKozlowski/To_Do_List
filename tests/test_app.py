@@ -39,6 +39,7 @@ def test_create_list_of_tasks():
 
 
 # Testing created scrollbar
+
 def test_create_scrollbar():
     var = window.create_scrollbar()
     assert str(var) == ".!frame2.!scrollbar2"
@@ -103,32 +104,36 @@ def test_create_input_field():
     assert str(var) == ".!frame.!entry2"
 
 
-
 # Testing created entry for update task
+
 def test_create_entry_for_update_task():
     var = window.create_entry_for_update_task('sample')
     assert str(var) == ".!frame2.!frame3.!entry"
 
 
 # Testing showing list of tasks
+
 def test_show_list_of_tasks():
     var = window.show_list_of_tasks()
     assert str(var) == ".!frame2.!listbox"
 
 
 # Testing is it string
+
 def test_tasks_in_list():
     var = window.tasks_in_list()
     assert var == ''
 
 
 # Testing if new task is string
+
 def test_add_task_to_list():
     var = window.add_task_to_list()
     assert isinstance(var, str) == True
 
 
 # Testing error message
+
 def test_send_error1_box():
     error = "Email Address or Password incorrect !!! Try again. Remember you must use SMTP password for your email. Go to your email options and SET SMTP password."
     error_title = "Email validation error."
@@ -136,7 +141,6 @@ def test_send_error1_box():
     assert str(var) == "Email Address or Password incorrect !!! Try again. Remember you must use SMTP password for your email. Go to your email options and SET SMTP password."
 
 
-# Testing error message
 def test_send_error2_box():
     error = "Wrong Recipient Address !!! Try again."
     error_title = "Email validation error."
@@ -144,7 +148,6 @@ def test_send_error2_box():
     assert str(var) == "Wrong Recipient Address !!! Try again."
 
 
-# Testing error message
 def test_send_error3_box():
     error = "Something's gone wrong, try again."
     error_title = "Connect Error"
@@ -152,7 +155,6 @@ def test_send_error3_box():
     assert str(var) == "Something's gone wrong, try again."
 
 
-# Testing error message
 def test_send_error4_box():
     error = "Email account dose'nt exists"
     error_title = "Connect Error"
@@ -161,10 +163,12 @@ def test_send_error4_box():
 
 
 # Testing pie chart label
+
 def test_pie_chart_label():
     var = window.pie_chart_label()
     assert str(var) == ".!frame2.!label2"
 
+# Testing update pie chart label
 
 def test_update_pie_chart_label():
     var = window.update_pie_chart_label()
