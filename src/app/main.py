@@ -3,6 +3,7 @@ from tkinter import messagebox, PhotoImage
 from email.message import EmailMessage
 import plotly.express as px
 import smtplib
+import socket
 import sqlite3
 import sys, os
 
@@ -12,9 +13,9 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 # Import passwd from function in other folder
-# from app.email_passwd.email_password import email_passwd
+from app.email_passwd.email_password import email_passwd
 
-# email_password = email_passwd()
+email_password = email_passwd()
 
 
 # BackGround Color
@@ -311,7 +312,6 @@ class ToDoList():
         send_email_button.bind("<Button>", lambda e: self.send_email_with_tasks(own_email_address_entry.get(), passwd_to_email_entry.get(), email_address_to_send_entry.get(),subject_entry.get(), message_to_send_entry.get(),chosen_list_nr=(chosen_field1.get() + chosen_field2.get() + chosen_field3.get())))
 
 
-
     # Creates a frame for tasks list
     def create_tasks_frame(self):
         frame = Frame(self.window, width=50, height=550, bg=APP_BACKGROUND)
@@ -357,7 +357,7 @@ class ToDoList():
     # Create scrollbar
     def create_scrollbar(self):
         list_scrollbar = Scrollbar(self.tasks_frame)
-        list_scrollbar.place(x=470, y=10, height=240)
+        list_scrollbar.place(x=470, y=10, height=250)
         return list_scrollbar
     
 
@@ -609,64 +609,23 @@ class ToDoList():
 
     # Delete task from bd
     def delete_task_in_db(self):
-        # Get name of task to delete from selected task
-        task_to_delete = self.list_of_tasks.selection_get()
-
-        if task_to_delete != '':
+        try:
+            # Get name of task to delete from selected task
+            task_to_delete = self.list_of_tasks.selection_get()
             
-
-            # Delete selected task in list
-            self.list_of_tasks.delete(ANCHOR)
-
-            # Connect to database
-            db_connect = sqlite3.connect('to_do_list.db')
-            cursor = db_connect.cursor()
-
-            # Delete task in database
-            cursor.execute(f"""DELETE FROM all_tasks WHERE name='{task_to_delete}'""")
-            cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_delete}'""")
-            cursor.execute(f"""DELETE FROM completed_tasks WHERE name='{task_to_delete}'""")
-        
-            # Commit changes in database and close connections
-            db_connect.commit()
-            db_connect.close()
-
-            # Update tasks widget
-            self.create_pie_chart()
-            self.update_pie_chart_label()
-
-            return task_to_delete
-        
-        return task_to_delete
-
-
-    # Add task to completed list
-    def add_to_completed_list(self):
-        # Get name of task to transferred to list of completed task
-        task_to_transfer = self.list_of_tasks.selection_get()
-
-        if task_to_transfer != '':
-
-            # Connect to database
-            db_connect = sqlite3.connect('to_do_list.db')
-            cursor = db_connect.cursor()    
-
-            completed_tasks = cursor.execute("""SELECT name FROM completed_tasks""")
-            completed_tasks = [task[0] for task in list(completed_tasks)]
-            
-            if task_to_transfer not in completed_tasks:
-
-                # Delete selected task in task to do list
+            if task_to_delete != '':
+                # Delete selected task in list
                 self.list_of_tasks.delete(ANCHOR)
 
+                # Connect to database
+                db_connect = sqlite3.connect('to_do_list.db')
+                cursor = db_connect.cursor()
 
-
-                # Delete task in "task to do" table in database
-                cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_transfer}'""")
-
-                # Add task to "completed task" table in database
-                cursor.execute(f"""INSERT INTO completed_tasks(id, name) VALUES(null, '{task_to_transfer.capitalize()}')""")
-
+                # Delete task in database
+                cursor.execute(f"""DELETE FROM all_tasks WHERE name='{task_to_delete}'""")
+                cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_delete}'""")
+                cursor.execute(f"""DELETE FROM completed_tasks WHERE name='{task_to_delete}'""")
+            
                 # Commit changes in database and close connections
                 db_connect.commit()
                 db_connect.close()
@@ -675,11 +634,60 @@ class ToDoList():
                 self.create_pie_chart()
                 self.update_pie_chart_label()
 
+                return task_to_delete
+            
+            return task_to_delete
+        
+        except:
+            return self.send_error_box("Selecting error.", "Select task to delete")
+
+
+    # Add task to completed list
+    def add_to_completed_list(self):
+
+        try:
+            # Get name of task to transferred to list of completed task
+            task_to_transfer = self.list_of_tasks.selection_get()
+
+            if task_to_transfer != '':
+
+                # Connect to database
+                db_connect = sqlite3.connect('to_do_list.db')
+                cursor = db_connect.cursor()    
+
+                completed_tasks = cursor.execute("""SELECT name FROM completed_tasks""")
+                completed_tasks = [task[0] for task in list(completed_tasks)]
+                
+                if task_to_transfer not in completed_tasks:
+
+                    # Delete selected task in task to do list
+                    self.list_of_tasks.delete(ANCHOR)
+
+
+
+                    # Delete task in "task to do" table in database
+                    cursor.execute(f"""DELETE FROM task_to_do WHERE name='{task_to_transfer}'""")
+
+                    # Add task to "completed task" table in database
+                    cursor.execute(f"""INSERT INTO completed_tasks(id, name) VALUES(null, '{task_to_transfer.capitalize()}')""")
+
+                    # Commit changes in database and close connections
+                    db_connect.commit()
+                    db_connect.close()
+
+                    # Update tasks widget
+                    self.create_pie_chart()
+                    self.update_pie_chart_label()
+
+                    return task_to_transfer
+                
                 return task_to_transfer
             
             return task_to_transfer
-        
-        return task_to_transfer
+
+        except:
+            return self.send_error_box("Selecting error.", "Select the task you want to add to your completed list")
+
 
     # Create add task to completed list button
     def create_add_to_completed_button(self):
@@ -703,8 +711,8 @@ class ToDoList():
         
 
     # Create send error box
-    def send_error_box(self, error):
-        messagebox.showinfo('ERROR !!!', error)
+    def send_error_box(self,error_title, error):
+        messagebox.showinfo(error_title, error)
         return error
 
 
@@ -806,10 +814,23 @@ class ToDoList():
             msg['From'] = my_email
             msg['To'] = email_to_send
 
+
             try:
                 # Create smtplib SMTP object
-                server = smtplib.SMTP('smtp.gmail.com', 587)
-                server.starttls()
+                if 'gmail' in my_email:
+                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                elif 'wp.pl' in my_email:
+                    server = smtplib.SMTP_SSL('smtp.wp.pl', 465)
+                elif ('interia.pl' or 'poczta.fm' or 'interia.eu') in my_email:
+                    server = smtplib.SMTP_SSL('poczta.interia.pl', 465)
+                elif 'o2.pl' in my_email:
+                    server = smtplib.SMTP_SSL('poczta.o2.pl', 465)
+                elif ('onet.pl' or 'op.pl' or 'poczta.onet.pl' or 'onet.eu' or 'onet.com.pl' or 'vp.pl' or 'spoko.pl' or 'vip.onet.pl' or 'autograf.pl' or 'opoczta.pl') in my_email:
+                    server = smtplib.SMTP_SSL('smtp.poczta.onet.pl', 465)
+                else:
+                    server = smtplib.SMTP_SSL(my_email, 465)
+
+                server.ehlo()
 
                 # Login to email
                 server.login(my_email, email_passwd)
@@ -829,10 +850,23 @@ class ToDoList():
 
             # Catch ten errors
             except smtplib.SMTPAuthenticationError:
-                self.send_error_box("Email Address or Password incorrect !!! Try again.")
+                self.send_error_box("Email validation error.", "Email Address or Password incorrect !!! Try again. Remember you must use SMTP password for your email. Go to your email options and SET SMTP password.")
 
             except smtplib.SMTPRecipientsRefused:
-                self.send_error_box("Wrong Recipient Address !!! Try again.")
+                self.send_error_box("Email validation error.", "Wrong Recipient Address !!! Try again.")
+
+            except smtplib.SMTPConnectError:
+                self.send_error_box("Connect Error", "Something's gone wrong, try again.")
+
+            except socket.gaierror:
+                self.send_error_box("Connect Error", "Email account dose'nt exists")
+
+            finally:
+                    self.email_frame.pack_forget()
+                    self.lists_button.grid_forget()
+                    self.tasks_frame.pack(expand=True, fill="both")
+                    self.email_button.grid(row=1, column=1)  
+
 
 
     def create_pie_chart(self):

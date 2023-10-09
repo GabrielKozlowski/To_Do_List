@@ -35,6 +35,7 @@
 
 ### And finally we can send to email one, two or all lists.
 <img src="/images/send_email.png">
+<img src="/images/email_view.png">
 
 ### There is a tasks widget, showing how many task we have, how many we want to do and how many we completed.
 <img src="/images/tasks_chart.png">
