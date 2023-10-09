@@ -63,7 +63,7 @@
 
 ## Status
 
-### This project is still in the development stage.
+### This project is finished and ready to use.
 
 
 
