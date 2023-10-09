@@ -12,11 +12,6 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
 
-# Import passwd from function in other folder
-from app.email_passwd.email_password import email_passwd
-# Set SMTP email password
-email_password = email_passwd()
-
 
 # BackGround Colors
 APP_BACKGROUND = "#cf6f0e"
@@ -734,9 +729,6 @@ class ToDoList():
 
     # Send email with tasks
     def send_email_with_tasks(self, my_email:str, email_passwd:str, email_to_send:str,subject:str, message:str, chosen_list_nr:int):
-            # My email data         
-            # my_email = "gabrielnauka2020@gmail.com"            
-            # email_passwd = email_password
 
             # Tags string for lists
             topTagTaskToDo = '\n\n---=== Task To Do ===---\n'
