@@ -6,25 +6,21 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 # Import class from main 
-# from src.app.main import ToDoList
 from src.app.main import ToDoList
 
-
+# Set class object
 window = ToDoList()
-a = ToDoList
-print(str(a.create_options_frame))
-print(str(window.create_options_frame()))
 
 # Testing created frame in program
 
 def test_create_options_frame():
     var = window.create_options_frame()    
-    assert str(var) == '.!frame4'
+    assert str(var) == '.!frame3'
 
 
 def test_create_tasks_frame():
     var = window.create_tasks_frame()
-    assert str(var) == ".!frame5"
+    assert str(var) == ".!frame4"
 
 
 def test_create_update_frame():
@@ -99,7 +95,7 @@ def test_create_lists_button():
 
 def test_create_email_field():
     var = window.create_email_field()
-    assert str(var) == ".!frame6"
+    assert str(var) == ".!frame5"
 
 
 def test_create_input_field():
@@ -134,16 +130,34 @@ def test_add_task_to_list():
 
 # Testing error message
 def test_send_error1_box():
-    error = "Email Address or Password incorrect !!! Try again."
-    var = window.send_error_box(error=error)
-    assert str(var) == "Email Address or Password incorrect !!! Try again."
+    error = "Email Address or Password incorrect !!! Try again. Remember you must use SMTP password for your email. Go to your email options and SET SMTP password."
+    error_title = "Email validation error."
+    var = window.send_error_box(error=error, error_title=error_title)
+    assert str(var) == "Email Address or Password incorrect !!! Try again. Remember you must use SMTP password for your email. Go to your email options and SET SMTP password."
 
 
 # Testing error message
 def test_send_error2_box():
     error = "Wrong Recipient Address !!! Try again."
-    var = window.send_error_box(error=error)
+    error_title = "Email validation error."
+    var = window.send_error_box(error=error, error_title=error_title)
     assert str(var) == "Wrong Recipient Address !!! Try again."
+
+
+# Testing error message
+def test_send_error3_box():
+    error = "Something's gone wrong, try again."
+    error_title = "Connect Error"
+    var = window.send_error_box(error=error, error_title=error_title)
+    assert str(var) == "Something's gone wrong, try again."
+
+
+# Testing error message
+def test_send_error4_box():
+    error = "Email account dose'nt exists"
+    error_title = "Connect Error"
+    var = window.send_error_box(error=error, error_title=error_title)
+    assert str(var) == "Email account dose'nt exists"
 
 
 # Testing pie chart label
@@ -156,8 +170,3 @@ def test_update_pie_chart_label():
     var = window.update_pie_chart_label()
     assert str(var) == ".!frame2.!label3"
 
-
-    ###############################################################################
-
-    def test_show_tasks_to_do_list():
-        pass
